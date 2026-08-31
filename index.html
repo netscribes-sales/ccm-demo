@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="referrer" content="no-referrer">
+<title>Continuous Audit Intelligence, Titan Industries</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0E1B2A;--navy2:#16283C;
+  --canvas:#F2F4F7;--surface:#FFF;--panel:#F5F6F8;--head:#F8F9FB;
+  --line:#DFE3E9;--line-soft:#EDEFF3;
+  --text:#10233A;--muted:#5F6E80;--muted2:#8794A3;
+  --red:#E0242B;--red-dark:#B81C22;--red-soft:#FDECEC;--red-line:#F5C9CA;
+  --accent:#1D4E89;--accent-soft:#EAF1F8;--accent-line:#C9DCEE;
+  --pass:#1B7A56;--pass-soft:#E8F4EF;--pass-line:#BFDFD1;
+  --warn:#A96A05;--warn-soft:#FCF2E3;--warn-line:#EBD6B2;
+  --sans:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  --disp:"Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --r:10px;
+}
+*{box-sizing:border-box}html,body{margin:0;padding:0}
+body{font-family:var(--sans);background:var(--canvas);color:var(--text);font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;font-size:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.sample{background:var(--navy);color:#9FB3C8;font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;padding:7px 16px;text-align:center}
+.shell{display:flex;min-height:100vh}
+.nav{width:214px;flex:0 0 214px;background:var(--navy);color:#9AA9BA;display:flex;flex-direction:column}
+.mark{padding:16px 16px 14px;border-bottom:1px solid rgba(255,255,255,.09);text-align:left;width:100%;display:block}
+.mark-row{display:flex;align-items:center;gap:8px}
+.mark-dot{width:17px;height:17px;border-radius:50% 50% 50% 2px;background:var(--red);flex:none;position:relative}
+.mark-dot::after{content:"";position:absolute;inset:5px 5px auto auto;width:5px;height:5px;border-radius:50%;background:#fff}
+.mark-n{font-family:var(--disp);font-weight:700;font-size:18px;color:#fff;letter-spacing:-.02em}
+.mark-s{font-family:var(--mono);font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:#7C8EA3;display:block;margin-top:6px}
+.nav nav{padding:10px 8px;display:flex;flex-direction:column;gap:1px}
+.nav nav button{text-align:left;padding:9px 10px;border-radius:6px;display:flex;gap:9px;align-items:center;color:#9AA9BA;line-height:1.25}
+.nav nav button:hover{background:rgba(255,255,255,.06);color:#E6EDF4}
+.nav nav button[aria-current="true"]{background:rgba(255,255,255,.1);color:#fff;box-shadow:inset 2px 0 0 var(--red)}
+.nav nav .k{font-family:var(--mono);font-size:9.5px;color:#6B7C90;width:20px;flex:0 0 20px}
+.nav nav button[aria-current="true"] .k{color:var(--red)}
+.persona{margin:12px 8px 0;padding:11px 10px;border:1px solid rgba(255,255,255,.1);border-radius:8px}
+.persona .h{font-family:var(--mono);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:#6B7C90;margin-bottom:7px}
+.persona button{display:block;width:100%;text-align:left;padding:6px 9px;border-radius:5px;font-size:11.5px;color:#9AA9BA;line-height:1.3}
+.persona button:hover{background:rgba(255,255,255,.06);color:#E6EDF4}
+.persona button[aria-pressed="true"]{background:var(--red);color:#fff;font-weight:600}
+.nav-foot{margin-top:auto;padding:12px 16px 16px;border-top:1px solid rgba(255,255,255,.09);font-size:10.5px;color:#6B7C90;line-height:1.55}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.asbar{background:var(--surface);border-bottom:1px solid var(--line);padding:11px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.asbar .t{font-family:var(--disp);font-size:19px;font-weight:700;letter-spacing:-.015em}
+.live{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10.5px;color:var(--pass);background:var(--pass-soft);border:1px solid var(--pass-line);padding:4px 10px;border-radius:20px}
+.dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex:none}
+.filters{background:var(--surface);border-bottom:1px solid var(--line);padding:9px 22px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.filters .lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted2)}
+select,input{font-family:inherit;font-size:12px;padding:6px 9px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--text)}
+.clearall{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--red);border:1px solid var(--red-line);background:var(--red-soft);padding:6px 10px;border-radius:6px}
+.content{padding:22px;flex:1}
+.eyebrow{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--red)}
+.h1{font-family:var(--disp);font-weight:800;font-size:42px;line-height:1.06;letter-spacing:-.03em;margin:12px 0 0}
+.h2{font-family:var(--disp);font-weight:700;font-size:25px;letter-spacing:-.02em;margin:8px 0 0}
+.sub{color:var(--muted);margin-top:10px;max-width:66ch}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.card-h{padding:12px 15px;border-bottom:1px solid var(--line-soft);display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.card-h h3{margin:0;font-family:var(--disp);font-size:13.5px;font-weight:700}
+.card-h .s{font-size:11px;color:var(--muted)}
+.card-b{padding:15px}
+.grid{display:grid;gap:12px}.g2{grid-template-columns:repeat(2,1fr)}.g21{grid-template-columns:2fr 1fr}
+@media(max-width:1000px){.g2,.g21{grid-template-columns:1fr}}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:18px}
+@media(max-width:1150px){.stats{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:720px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{background:var(--panel);border-radius:var(--r);padding:15px 16px}
+.stat-k{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted2)}
+.stat-v{font-family:var(--disp);font-weight:800;font-size:28px;margin-top:6px;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.stat-v.pass{color:var(--pass)}.stat-v.fail{color:var(--red)}.stat-v.acc{color:var(--accent)}
+.stat-n{font-family:var(--mono);font-size:10px;color:var(--muted2);margin-top:4px}
+.rail-track{position:relative;height:var(--h,10px);width:100%;background:var(--panel);border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.rail-fill{position:absolute;inset:0 auto 0 0;display:flex}
+.rail-pass{background:var(--pass)}.rail-fail{background:var(--red)}
+.rail-untested{position:absolute;inset:0 0 0 auto;background-image:repeating-linear-gradient(45deg,#DCE1E8 0 4px,#F1F3F6 4px 8px)}
+.rail-ticks{position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(to right,rgba(255,255,255,.7) 0 1px,transparent 1px 10%)}
+.rail-cap{display:flex;justify-content:space-between;gap:12px;margin-top:6px;font-family:var(--mono);font-size:10px;color:var(--muted2)}
+.rail-cap b{color:var(--text);font-weight:500}
+table{width:100%;border-collapse:collapse}
+.tbl-wrap{border:1px solid var(--line);background:var(--surface);border-radius:var(--r);overflow:hidden}
+.tbl-scroll{overflow-x:auto}
+th{background:var(--head);text-align:left;padding:10px 13px;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:500;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+tbody tr:last-child td{border-bottom:none}
+tr.click{cursor:pointer}tr.click:hover{background:var(--accent-soft)}
+tr.zebra{background:rgba(16,35,58,.014)}
+tr.grp td{background:var(--panel);font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:8px 13px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.mono{font-family:var(--mono)}.dim{color:var(--muted)}.dim2{color:var(--muted2)}
+.rid{font-family:var(--mono);color:var(--accent);font-weight:500}
+.chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;padding:3px 8px;border:1px solid;border-radius:20px;white-space:nowrap}
+.chip.ok{color:var(--pass);border-color:var(--pass-line);background:var(--pass-soft)}
+.chip.no{color:var(--red);border-color:var(--red-line);background:var(--red-soft)}
+.chip.hi{color:var(--red);border-color:var(--red-line)}
+.chip.me{color:var(--warn);border-color:var(--warn-line)}
+.chip.lo{color:var(--muted);border-color:var(--line)}
+.chip.open{color:var(--red);border-color:var(--red-line);background:var(--red-soft)}
+.chip.assigned{color:var(--warn);border-color:var(--warn-line);background:var(--warn-soft)}
+.chip.responded{color:var(--accent);border-color:var(--accent-line);background:var(--accent-soft)}
+.chip.closed{color:var(--pass);border-color:var(--pass-line);background:var(--pass-soft)}
+.chip.biz{color:var(--accent);border-color:var(--accent-line);background:var(--accent-soft)}
+.chip.ia{color:var(--muted);border-color:var(--line);background:var(--panel)}
+.btn{display:inline-flex;align-items:center;gap:9px;font-family:var(--disp);font-weight:600;font-size:13px;padding:12px 22px;border-radius:6px;background:var(--red);color:#fff;border:1px solid var(--red)}
+.btn:hover{background:var(--red-dark);border-color:var(--red-dark)}
+.btn.plain{background:#fff;border-color:var(--line);color:var(--text)}
+.btn.plain:hover{background:var(--panel)}
+.foot{border-top:1px solid var(--line);margin-top:24px;padding:14px 0 6px;font-family:var(--mono);font-size:10px;color:var(--muted2);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.rule-box{background:var(--accent-soft);border:1px solid var(--accent-line);border-left:3px solid var(--accent);border-radius:6px;padding:13px 15px;line-height:1.55}
+.rule-box .h{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.bar-row .nm{flex:0 0 182px;font-size:11.5px}
+.bar-track{flex:1;height:14px;background:var(--panel);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;background:var(--accent)}.bar-fill.warn{background:var(--red)}
+.bar-row .vv{width:36px;text-align:right;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.recon{background:var(--navy);padding:20px;color:#DDE6EF;border-radius:var(--r)}
+.recon h3{margin:0;font-family:var(--disp);font-size:16px;color:#fff;font-weight:700}
+.recon .p{font-family:var(--mono);font-size:10.5px;color:#7C8EA3;margin-top:5px}
+.recon-bar{display:flex;height:34px;border:1px solid rgba(255,255,255,.14);border-radius:5px;overflow:hidden;margin-top:15px}
+.recon-bar div{display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10.5px;color:#fff;background:#26405C;flex:1}
+.recon-legend{display:flex;gap:28px;margin-top:14px;flex-wrap:wrap}
+.recon-legend div{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:#7C8EA3}
+.recon-legend b{display:block;font-family:var(--disp);color:#fff;font-size:22px;font-weight:800;text-transform:none;letter-spacing:-.02em;margin-top:5px;font-variant-numeric:tabular-nums}
+.logline{font-family:var(--mono);font-size:11px;padding:6px 0;border-bottom:1px dashed var(--line-soft);display:flex;gap:14px}
+.logline .ts{color:var(--muted2);flex:0 0 116px}
+.logline .rs{flex:0 0 46px;color:var(--pass);font-weight:600}
+.scrim{position:fixed;inset:0;background:rgba(14,27,42,.44);display:none;z-index:4}
+.scrim.on{display:block}
+.drawer{position:fixed;top:0;right:0;height:100%;width:478px;max-width:94vw;background:var(--surface);transform:translateX(102%);transition:transform .18s;display:flex;flex-direction:column;z-index:5;box-shadow:-8px 0 30px rgba(14,27,42,.14)}
+.drawer.on{transform:translateX(0)}
+.d-head{padding:15px 17px;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:flex-start}
+.d-head h3{margin:0;font-family:var(--disp);font-size:17px;font-weight:700;line-height:1.25;letter-spacing:-.02em}
+.d-head .x{margin-left:auto;border:1px solid var(--line);border-radius:6px;width:28px;height:28px;color:var(--muted);flex:none}
+.d-body{padding:17px;overflow-y:auto;flex:1}
+.kv{display:grid;grid-template-columns:150px 1fr;gap:7px 10px;font-size:12.5px;margin:0}
+.kv dt{color:var(--muted)}.kv dd{margin:0;font-family:var(--mono);font-size:11.5px}
+.d-sec{margin-top:18px;padding-top:15px;border-top:1px solid var(--line-soft)}
+.d-sec h4{margin:0 0 10px;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2)}
+.field{margin-bottom:10px}.field label{display:block;font-size:11.5px;color:var(--muted);margin-bottom:5px}
+.field select,.field input{width:100%}
+.trail div{padding:7px 0;border-bottom:1px dashed var(--line-soft);font-size:12px}
+.trail .w{font-family:var(--mono);font-size:10.5px;color:var(--muted2)}
+.note{color:var(--muted);line-height:1.6}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:11px 13px;margin-bottom:7px;font-size:12.5px}
+.step.old{border-left:3px solid var(--red)}.step.new{border-left:3px solid var(--pass)}
+.step .who{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);margin-bottom:4px}
+.hidden{display:none}
+.cmp{margin-top:32px;max-width:640px}
+.cmp-row{margin-bottom:24px}
+.cmp-lbl{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted2);margin-bottom:8px}
+.cmp-lbl .v{font-family:var(--disp);font-size:24px;font-weight:800;letter-spacing:-.03em;text-transform:none}
+.cmp-row.a .v{color:var(--muted)}.cmp-row.b .v{color:var(--red)}
+</style>
+</head>
+<body>
+<div class="sample">Confidential &nbsp;·&nbsp; demonstration build &nbsp;·&nbsp; all figures illustrative &nbsp;·&nbsp; prepared for discussion</div>
+<div class="shell">
+  <aside class="nav">
+    <button class="mark" id="markBtn">
+      <span class="mark-row"><span class="mark-dot"></span><span class="mark-n">netscribes</span></span>
+      <span class="mark-s">Audit Intelligence</span></button>
+    <nav id="nav">
+      <button data-view="status" aria-current="true"><span class="k">01</span>Control status</button>
+      <button data-view="worklist"><span class="k">02</span>Exception worklist</button>
+      <button data-view="coverage"><span class="k">03</span>Run and evidence log</button>
+      <button data-view="board"><span class="k">04</span>Board view</button>
+      <button data-view="approach"><span class="k">05</span>How it runs</button>
+    </nav>
+    <div class="persona">
+      <div class="h">Viewing as</div>
+      <button data-persona="ia" aria-pressed="true">Internal audit</button>
+      <button data-persona="biz" aria-pressed="false">Process owner</button>
+    </div>
+    <div class="nav-foot">Runs every night inside the Titan environment. Controls handed to the business appear in the owner view only.<br><br>Confidential. Prepared by Netscribes for discussion. Nothing is entered, stored or sent from this page.</div>
+  </aside>
+  <div class="main">
+    <div class="asbar" id="asbar"></div>
+    <div class="filters" id="filters"></div>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="d-head"><div style="min-width:0"><h3 id="dTitle">Exception</h3>
+    <div class="mono dim2" id="dRef" style="font-size:11px;margin-top:5px"></div></div>
+    <button class="x" id="dClose" aria-label="Close">&times;</button></div>
+  <div class="d-body" id="dBody"></div>
+</aside>
+
+<script>
+/* ================= divisions and areas ================= */
+const DIVS=[
+ {id:"jwl",code:"TTN-JWL",name:"Jewellery",note:"Tanishq, Mia, Zoya",erp:"SAP S/4HANA",w:.34},
+ {id:"wch",code:"TTN-WCH",name:"Watches and Wearables",note:"Hosur, Dehradun, Coimbatore",erp:"SAP S/4HANA",w:.25},
+ {id:"eye",code:"TTN-EYE",name:"EyeCare",note:"Titan Eyeplus",erp:"SAP S/4HANA",w:.11},
+ {id:"ffa",code:"TTN-FFA",name:"Fragrances and Accessories",note:"Skinn, Fastrack",erp:"SAP ECC",w:.08},
+ {id:"tea",code:"TTN-TEA",name:"Engineering and Automation",note:"Aerospace and automation",erp:"SAP ECC",w:.13},
+ {id:"cor",code:"TTN-COR",name:"Corporate and Shared Services",note:"Finance, HR, IT",erp:"SAP S/4HANA",w:.09}];
+const ALLD=["jwl","wch","eye","ffa","tea","cor"];
+const AREAS=[
+ {id:"jop",code:"JOP",name:"Jewellery Operations",note:"Karigar issue and return, transfers, verification, old gold, making charge",divs:["jwl"]},
+ {id:"p2p",code:"P2P",name:"Procure to Pay",note:"Vendor master, requisition, order, receipt, invoice, payment",divs:ALLD},
+ {id:"o2c",code:"O2C",name:"Order to Cash",note:"Customer master, credit, pricing, orders, billing, collections",divs:["jwl","wch","eye","ffa","tea"]},
+ {id:"inv",code:"INV",name:"Inventory Management",note:"Goods movement, cycle counts, bullion and stone stock, provisioning",divs:["jwl","wch","eye","ffa","tea"]},
+ {id:"r2r",code:"R2R",name:"Record to Report",note:"Journals, reconciliations, intercompany, close, fixed assets",divs:ALLD},
+ {id:"plt",code:"PLT",name:"Plant Operations",note:"Production orders, yield and wastage, quality, subcontracting",divs:["jwl","wch","ffa","tea"]},
+ {id:"hrp",code:"HRP",name:"HR and Payroll",note:"Employee master, payroll, attendance, expense claims",divs:ALLD},
+ {id:"itg",code:"ITGC",name:"IT General Controls",note:"Access, privileged users, change management, backup",divs:ALLD},
+ {id:"cmp",code:"CMP",name:"Compliance",note:"Statutory filings, licences, hallmarking, sanctions screening",divs:ALLD},
+ {id:"grc",code:"GRC",name:"Governance and Risk",note:"Risk register, ethics cases, third party oversight, attestation",divs:ALLD}];
+
+const OWNERS=["Suresh N, Store Operations","Meera K, Karigar Cell","Anand R, Regional Retail","Divya S, Merchandising",
+"Rajat P, Finance Control","Vikram T, Procurement","Latha M, Accounts Payable","Nikhil B, Treasury",
+"Priya G, Accounts Receivable","Sanjay M, Credit Control","Kavita R, Payroll","Arun S, HR Operations",
+"Ramesh P, IT Operations","Farah K, Information Security","Ganesh V, Plant Operations","Shalini D, Quality",
+"Mohan L, Statutory Compliance","Neha A, Risk and Governance","Deepak J, Warehouse and Stores","Ritu S, Financial Reporting"];
+
+/* ================= sub processes ================= */
+const S_=(id,name,object,population,shape,cadence,last)=>({id,name,object,population,shape,cadence,last});
+const SUBS={
+ jop:[S_("1","Karigar Issue and Return","job orders",14286,"job","Daily","27 Aug 06:12"),
+      S_("2","Interstore Stock Movement","transfer notes",9642,"stn","Daily","27 Aug 06:12"),
+      S_("3","Stock Custody and Physical Verification","count sheets",912,"pv","Monthly","01 Aug 02:40"),
+      S_("4","Old Gold Exchange","exchange invoices",23411,"og","Daily","27 Aug 06:13"),
+      S_("5","Making Charge and Discount","sales invoices",187140,"si","Daily","27 Aug 06:15")],
+ p2p:[S_("1","Vendor Master","vendor records",4182,"vendor","Daily","27 Aug 06:20"),
+      S_("2","Requisition and Approval","requisitions",46220,"req","Daily","27 Aug 06:21"),
+      S_("3","Sourcing and Vendor Selection","sourcing events",2914,"src","Weekly","24 Aug 06:20"),
+      S_("4","Purchase Order","purchase orders",38417,"po","Daily","27 Aug 06:21"),
+      S_("5","Goods Receipt and Service Acceptance","goods receipts",61509,"grn","Daily","27 Aug 06:22"),
+      S_("6","Invoice Processing and Three Way Match","invoices",127904,"inv","Daily","27 Aug 06:23"),
+      S_("7","Payment Processing","payments",94338,"pay","Daily","27 Aug 06:24")],
+ o2c:[S_("1","Customer Master","customer records",18240,"cust","Daily","27 Aug 06:26"),
+      S_("2","Credit and Limits","credit reviews",6410,"credit","Daily","27 Aug 06:26"),
+      S_("3","Pricing and Discounts","price conditions",24880,"price","Daily","27 Aug 06:27"),
+      S_("4","Order Management","sales orders",412600,"order","Daily","27 Aug 06:28"),
+      S_("5","Billing and Invoicing","customer invoices",386440,"cinv","Daily","27 Aug 06:29"),
+      S_("6","Collections and Receivables","open items",92310,"recv","Weekly","24 Aug 06:30")],
+ inv:[S_("1","Goods Movement","movement documents",486200,"mvt","Daily","27 Aug 06:31"),
+      S_("2","Cycle Count and Stock Take","count documents",4820,"cnt","Monthly","01 Aug 02:44"),
+      S_("3","Bullion and Precious Stock","bullion movements",38610,"bul","Daily","27 Aug 06:32"),
+      S_("4","Slow Moving and Provisioning","stock lines",61240,"slow","Monthly","01 Aug 02:46")],
+ r2r:[S_("1","Journal Entries","journals",148920,"jnl","Daily","27 Aug 06:34"),
+      S_("2","Account Reconciliations","reconciliations",3840,"recon","Monthly","01 Aug 02:50"),
+      S_("3","Intercompany","intercompany postings",12460,"ico","Daily","27 Aug 06:35"),
+      S_("4","Period Close","close tasks",1180,"close","Monthly","01 Aug 02:52"),
+      S_("5","Fixed Assets","asset records",24610,"asset","Monthly","01 Aug 02:54")],
+ plt:[S_("1","Production Orders","production orders",46210,"prod","Daily","27 Aug 06:37"),
+      S_("2","Yield and Wastage","yield records",38940,"yld","Daily","27 Aug 06:37"),
+      S_("3","Quality and Rejections","inspection lots",24180,"qc","Daily","27 Aug 06:38"),
+      S_("4","Subcontracting","subcontract challans",12460,"scon","Daily","27 Aug 06:39")],
+ hrp:[S_("1","Employee Master","employee records",12840,"emp","Daily","27 Aug 06:41"),
+      S_("2","Payroll Processing","payroll lines",154080,"pay2","Monthly","01 Aug 03:00"),
+      S_("3","Time and Attendance","attendance records",386400,"att","Weekly","24 Aug 06:42"),
+      S_("4","Expense Claims","claims",48210,"exp","Daily","27 Aug 06:42")],
+ itg:[S_("1","Access Provisioning","user accounts",9840,"usr","Daily","27 Aug 06:44"),
+      S_("2","Privileged Access","privileged sessions",2410,"priv","Daily","27 Aug 06:44"),
+      S_("3","Change Management","transports",3860,"chg","Daily","27 Aug 06:45"),
+      S_("4","Backup and Recovery","backup jobs",1820,"bkp","Daily","27 Aug 06:45")],
+ cmp:[S_("1","Statutory Filings","filings",1240,"fil","Monthly","01 Aug 03:10"),
+      S_("2","Licences and Registrations","licences",860,"lic","Monthly","01 Aug 03:11"),
+      S_("3","Hallmarking and Product Compliance","hallmark batches",3120,"hm","Daily","27 Aug 06:47"),
+      S_("4","Sanctions and Screening","screenings",5820,"scr","Weekly","24 Aug 06:47")],
+ grc:[S_("1","Risk Register","risks",620,"risk","Quarterly","01 Jul 03:20"),
+      S_("2","Ethics and Whistleblower","cases",184,"case","Monthly","01 Aug 03:21"),
+      S_("3","Third Party Oversight","third parties",2140,"tp","Monthly","01 Aug 03:22"),
+      S_("4","Policy Attestation","attestations",8420,"att2","Quarterly","01 Jul 03:24")]};
+
+/* ================= rule libraries ================= */
+const R_=t=>({id:t[0],sub:t[1],sev:t[2],failed:t[3],mon:t[4],own:t[5]<0?"":OWNERS[t[5]],d:t[6]});
+const RAW={
+ jop:[
+ ["J1.1-R1","1","High",96,"biz",1,"Gold received back against a job order, plus approved wastage, does not reconcile to the weight issued within the wastage norm for the ornament category."],
+ ["J1.1-R2","1","High",38,"biz",1,"Job order open beyond 45 days from issue date with no return posted and no extension approved."],
+ ["J1.2-R1","1","Medium",142,"ia",-1,"Wastage claimed above the category norm with no deviation approval recorded by the manufacturing head."],
+ ["J1.2-R2","1","Medium",0,"ia",-1,"Job order issued to a karigar whose agreement or insurance cover had lapsed at the issue date."],
+ ["J2.1-R1","2","Medium",64,"biz",2,"Stock transfer despatched from a store with no receipt posted at the destination within 7 days."],
+ ["J2.1-R2","2","High",11,"ia",-1,"Stock transfer in transit beyond 21 days, past the escalation threshold, with no investigation recorded."],
+ ["J2.2-R1","2","Medium",87,"biz",2,"Net weight received at the destination differs from the weight despatched beyond the permitted tolerance."],
+ ["J3.1-R1","3","High",41,"ia",-1,"Physical verification variance beyond 0.5 g by purity category, or value variance above 25,000, with no explanation from the store manager."],
+ ["J3.1-R2","3","Medium",73,"biz",0,"Count sheet uploaded after the scheduled count date, or count performed by the custodian of the stock."],
+ ["J3.2-R1","3","Low",0,"biz",0,"Store with no physical verification recorded in the cycle count calendar for the period."],
+ ["J4.1-R1","4","High",118,"ia",-1,"Purity recorded at the karat meter does not match the purity used for valuation on the exchange invoice."],
+ ["J4.1-R2","4","High",29,"ia",-1,"Old gold exchange above 100,000 released without recorded second level approval."],
+ ["J4.2-R1","4","Medium",204,"biz",0,"Deduction applied on old gold outside the approved slab for the purity band."],
+ ["J5.1-R1","5","High",143,"ia",-1,"Discount on making charges applied beyond the slab approved for the scheme, store grade and customer category, with no recorded override approval."]],
+ p2p:[
+ ["1.1-R1","1","High",148,"ia",-1,"Vendor created or modified without approved request and mandatory KYC documents attached."],
+ ["1.1-R2","1","High",27,"ia",-1,"Vendor record created or activated by the same user who requested it, or by a user with conflicting payable roles."],
+ ["1.2-R1","1","Medium",312,"biz",5,"Missing or incomplete vendor confirmation or call back evidence."],
+ ["1.2-R2","1","High",9,"ia",-1,"Inadequate segregation or missing dual control on bank detail change."],
+ ["1.3-R1","1","Low",604,"biz",5,"Vendors with no postings for 12 to 18 months remain active and not reviewed for blocking."],
+ ["1.3-R2","1","Medium",41,"biz",5,"Potential duplicates on tax ID or bank account active in parallel with no documented rationale."],
+ ["1.3-R3","1","Medium",0,"biz",5,"Vendors missing mandatory master data fields beyond the allowed grace period."],
+ ["2.1-R1","2","High",1204,"ia",-1,"Requisition approved outside the delegation of authority limit for the approver role and cost centre."],
+ ["2.1-R2","2","High",318,"ia",-1,"Requisition raised and approved by the same user, or approved by a subordinate of the requester."],
+ ["2.2-R1","2","Medium",0,"biz",4,"Requisition raised against a cost centre with no available budget at the time of approval."],
+ ["2.2-R2","2","Medium",87,"biz",4,"Requisition value amended upward after approval without re routing for fresh authorisation."],
+ ["2.3-R1","2","Low",2946,"biz",5,"Requisition approved retrospectively, with approval date later than the purchase order date."],
+ ["3.1-R1","3","Medium",411,"biz",5,"Award made without the minimum number of comparative quotes required for the spend band."],
+ ["3.1-R2","3","High",63,"ia",-1,"Single source or emergency award without a valid justification code or competent authority sign off."],
+ ["3.2-R1","3","Medium",0,"ia",-1,"Award made to a vendor not screened against the sanctions list within the validity window."],
+ ["3.2-R2","3","Medium",19,"biz",5,"Award made to a vendor whose responsible sourcing certification had lapsed at award date."],
+ ["4.1-R1","4","High",892,"ia",-1,"Purchase order released without a linked approved requisition or valid rate contract."],
+ ["4.1-R2","4","High",1517,"ia",-1,"Order splitting. Multiple orders to the same vendor within a 7 day window that together breach an approval threshold."],
+ ["4.2-R1","4","High",46,"ia",-1,"Purchase order price exceeds the contracted rate beyond tolerance with no recorded rationale."],
+ ["4.2-R2","4","Medium",0,"biz",5,"Purchase order raised in a currency other than the contract currency without an approved exception."],
+ ["4.3-R1","4","Low",3088,"biz",5,"Purchase order created after the goods receipt or invoice date, indicating a retrospective order."],
+ ["4.3-R2","4","Medium",214,"biz",5,"Purchase order amended after first receipt with quantity or value changed and no revised approval."],
+ ["5.1-R1","5","Medium",1842,"biz",6,"Goods receipt posted with quantity variance against the purchase order beyond tolerance."],
+ ["5.1-R2","5","High",97,"ia",-1,"Goods receipt posted by the same user who raised the purchase order or approved the requisition."],
+ ["5.2-R1","5","High",0,"ia",-1,"Service entry sheet accepted with no supporting completion certificate or measurement record."],
+ ["5.2-R2","5","Medium",623,"biz",6,"Goods receipt posted against a purchase order line already fully received, creating over receipt."],
+ ["5.3-R1","5","Low",4411,"biz",6,"Goods receipt posted on the same date as the invoice, with no independent inspection record."],
+ ["6.1-R1","6","High",2318,"ia",-1,"Invoice posted without a completed three way match against purchase order and goods receipt."],
+ ["6.1-R2","6","High",431,"ia",-1,"Potential duplicate invoice. Same vendor, amount and reference within a 90 day window."],
+ ["6.2-R1","6","Low",8904,"biz",6,"Non purchase order invoice booked in a category where a purchase order is mandatory under policy."],
+ ["6.2-R2","6","High",156,"ia",-1,"Invoice value exceeds the purchase order value beyond tolerance with no approved variation."],
+ ["6.3-R1","6","Medium",0,"biz",6,"Invoice booked against a vendor blocked or flagged for deletion at the time of posting."],
+ ["6.3-R2","6","Medium",1067,"biz",4,"Tax treatment on the invoice inconsistent with the vendor type or the code mapping."],
+ ["7.1-R1","7","High",62,"ia",-1,"Payment released to bank details changed within 14 days of the payment run with no independent verification."],
+ ["7.2-R1","7","Medium",1338,"biz",7,"Payment released outside the agreed payment calendar or ahead of the contracted credit term."],
+ ["7.3-R1","7","High",0,"ia",-1,"Payment run executed from an address outside the whitelisted range for treasury operations."],
+ ["7.3-R2","7","High",287,"ia",-1,"Payment released without dual authorisation for a value above the treasury single approval limit."]],
+ o2c:[
+ ["O1.1-R1","1","High",62,"ia",-1,"Customer created or modified without an approved request and mandatory registration documents on file."],
+ ["O1.1-R2","1","Medium",148,"biz",8,"Customer bank or payout details changed without dual control."],
+ ["O1.2-R1","1","Low",412,"biz",8,"Customers dormant beyond 18 months remain active with no review recorded."],
+ ["O2.1-R1","2","High",96,"ia",-1,"Sales order released against a customer whose credit limit was exceeded, with no recorded override."],
+ ["O2.1-R2","2","High",24,"ia",-1,"Credit limit increased by a user who also releases blocked orders."],
+ ["O2.2-R1","2","Medium",0,"biz",9,"Credit review overdue beyond the policy period for a customer with active exposure."],
+ ["O3.1-R1","3","High",318,"ia",-1,"Selling price below the approved floor for the article and channel with no override approval."],
+ ["O3.1-R2","3","Medium",204,"biz",3,"Discount applied outside the validity window of the scheme it was claimed under."],
+ ["O3.2-R1","3","Medium",87,"biz",3,"Price condition maintained by a user outside the pricing team."],
+ ["O4.1-R1","4","Medium",1240,"biz",2,"Order despatched before payment received or approved credit terms applied."],
+ ["O4.1-R2","4","Low",2860,"biz",2,"Order amended after despatch without re approval."],
+ ["O4.2-R1","4","High",74,"ia",-1,"Order booked for a customer blocked or flagged for deletion at the time of booking."],
+ ["O4.2-R2","4","Medium",0,"ia",-1,"Franchise order released beyond the agreed consignment limit."],
+ ["O5.1-R1","5","High",412,"ia",-1,"Invoice raised without a corresponding despatch document."],
+ ["O5.1-R2","5","Medium",688,"biz",8,"Credit note issued above the approval limit without recorded authorisation."],
+ ["O5.2-R1","5","Medium",231,"biz",8,"Tax rate on the invoice inconsistent with the article code mapping."],
+ ["O5.2-R2","5","Low",1420,"biz",8,"Invoice cancelled and reissued within 24 hours with a changed value."],
+ ["O6.1-R1","6","Medium",486,"biz",9,"Receipt applied to an invoice other than the one referenced by the customer."],
+ ["O6.1-R2","6","High",38,"ia",-1,"Write off of a receivable above the delegated limit with no approval recorded."],
+ ["O6.2-R1","6","Low",940,"biz",9,"Open item ageing beyond 180 days with no follow up recorded."]],
+ inv:[
+ ["I1.1-R1","1","High",486,"ia",-1,"Goods movement posted without a reference document or a valid reason code."],
+ ["I1.1-R2","1","High",92,"ia",-1,"Movement posted by a user who also maintains the material master."],
+ ["I1.2-R1","1","Medium",1240,"biz",18,"Stock transfer posted between plants with no in transit clearing within tolerance."],
+ ["I1.2-R2","1","Low",3860,"biz",18,"Movement reversed within 24 hours of posting with no reason recorded."],
+ ["I1.3-R1","1","Medium",412,"biz",18,"Negative stock permitted at storage location level."],
+ ["I2.1-R1","2","High",74,"ia",-1,"Cycle count variance beyond tolerance posted without approval."],
+ ["I2.1-R2","2","Medium",148,"biz",18,"Count performed by the custodian of the stock counted."],
+ ["I2.2-R1","2","Medium",96,"biz",18,"Storage location not counted within the frequency required by the count calendar."],
+ ["I3.1-R1","3","High",118,"ia",-1,"Bullion issue not reconciled to the receipt weight within the permitted tolerance."],
+ ["I3.1-R2","3","High",36,"ia",-1,"Precious stock movement posted outside the approved vault access window."],
+ ["I3.2-R1","3","Medium",204,"biz",1,"Stone lot weight variance beyond tolerance on issue and return."],
+ ["I3.2-R2","3","Medium",0,"ia",-1,"Vault access granted to a user without a dual custody assignment."],
+ ["I4.1-R1","4","Medium",486,"biz",3,"Stock ageing beyond 365 days without provisioning as required by policy."],
+ ["I4.1-R2","4","Low",1240,"biz",3,"Slow moving stock reclassified without documented rationale."],
+ ["I4.2-R1","4","Medium",312,"biz",3,"Provision reversed without evidence of sale or usage."],
+ ["I4.2-R2","4","Low",620,"biz",18,"Stock write off posted without approved authorisation."],
+ ["I4.3-R1","4","High",41,"ia",-1,"Scrap disposal without a recorded weighment and approval."],
+ ["I4.3-R2","4","Medium",0,"biz",18,"Consignment stock at franchise not confirmed for the period."]],
+ r2r:[
+ ["R1.1-R1","1","High",214,"ia",-1,"Manual journal posted and approved by the same user."],
+ ["R1.1-R2","1","High",96,"ia",-1,"Journal posted to a restricted account by a user without that authorisation."],
+ ["R1.2-R1","1","Medium",468,"biz",19,"Journal posted on a weekend or public holiday with no supporting note."],
+ ["R1.2-R2","1","Medium",312,"biz",19,"Journal above threshold with a round value and no supporting document attached."],
+ ["R1.3-R1","1","Low",1840,"biz",19,"Journal narration blank or generic against policy."],
+ ["R2.1-R1","2","High",48,"ia",-1,"Balance sheet reconciliation not completed within the close calendar."],
+ ["R2.1-R2","2","High",22,"ia",-1,"Reconciliation prepared and reviewed by the same person."],
+ ["R2.2-R1","2","Medium",136,"biz",19,"Reconciling item open beyond 90 days with no action plan recorded."],
+ ["R3.1-R1","3","High",88,"ia",-1,"Intercompany balance not matched with the counterparty entity at period end."],
+ ["R3.1-R2","3","Medium",164,"biz",4,"Intercompany invoice raised outside the agreed transfer pricing rate."],
+ ["R3.2-R1","3","Medium",0,"ia",-1,"Intercompany settlement delayed beyond the agreed cycle."],
+ ["R4.1-R1","4","Medium",74,"biz",19,"Close task completed after the scheduled close date."],
+ ["R4.1-R2","4","High",12,"ia",-1,"Posting made into a closed period after the period lock."],
+ ["R4.2-R1","4","Low",208,"biz",19,"Accrual carried forward without review for three consecutive periods."],
+ ["R5.1-R1","5","Medium",96,"biz",4,"Asset capitalised without an approved capital authorisation."],
+ ["R5.1-R2","5","Medium",148,"biz",4,"Depreciation not run or only partially run for an asset class in the period."],
+ ["R5.2-R1","5","Low",312,"biz",4,"Asset retired or transferred without physical verification evidence."],
+ ["R5.2-R2","5","High",0,"ia",-1,"Asset disposal proceeds not recorded against the asset retired."]],
+ plt:[
+ ["P1.1-R1","1","Medium",486,"biz",14,"Production order confirmed without a goods issue against the bill of material."],
+ ["P1.1-R2","1","High",74,"ia",-1,"Production order closed with a variance beyond tolerance and no approval."],
+ ["P1.2-R1","1","Low",1240,"biz",14,"Order confirmed after the scheduled finish date with no revised plan."],
+ ["P2.1-R1","2","High",148,"ia",-1,"Yield below the standard for the process with no deviation approval."],
+ ["P2.1-R2","2","High",62,"ia",-1,"Wastage booked above the norm for precious metal operations."],
+ ["P2.2-R1","2","Medium",312,"biz",14,"Rework booked without linkage to the original production order."],
+ ["P2.2-R2","2","Medium",0,"ia",-1,"Scrap generated without a weighment record."],
+ ["P3.1-R1","3","Medium",208,"biz",15,"Inspection lot released without the result being recorded."],
+ ["P3.1-R2","3","High",46,"ia",-1,"Usage decision made by the person who performed the inspection."],
+ ["P3.2-R1","3","Medium",96,"biz",15,"Rejection above the norm for a supplier with no corrective action raised."],
+ ["P3.2-R2","3","Low",412,"biz",15,"Quality certificate not on file for a released batch."],
+ ["P4.1-R1","4","High",86,"ia",-1,"Subcontract challan open beyond 180 days, past the statutory window."],
+ ["P4.1-R2","4","Medium",148,"biz",5,"Material issued to a subcontractor beyond the order quantity."],
+ ["P4.2-R1","4","Medium",0,"biz",5,"Subcontract receipt posted without the corresponding challan reference."]],
+ hrp:[
+ ["H1.1-R1","1","High",42,"ia",-1,"Employee record created without an approved requisition or offer reference."],
+ ["H1.1-R2","1","High",18,"ia",-1,"Bank account changed within 7 days of the payroll run with no verification."],
+ ["H1.2-R1","1","Medium",86,"biz",11,"Two employees sharing the same bank account or tax identification number."],
+ ["H2.1-R1","2","High",64,"ia",-1,"Payment made to an employee separated before the payroll period."],
+ ["H2.1-R2","2","Medium",148,"biz",10,"Payroll variance beyond tolerance against the prior period with no explanation."],
+ ["H2.2-R1","2","Medium",96,"biz",10,"Overtime paid beyond the statutory ceiling for the location."],
+ ["H2.2-R2","2","Low",312,"biz",10,"Salary revision effective before the approval date."],
+ ["H3.1-R1","3","Low",1840,"biz",11,"Attendance regularised by the employee without supervisor approval."],
+ ["H3.1-R2","3","Medium",412,"biz",11,"Leave taken without balance or approval on record."],
+ ["H3.2-R1","3","Medium",0,"ia",-1,"Contract worker attendance recorded without a valid gate pass."],
+ ["H4.1-R1","4","Medium",486,"biz",11,"Claim submitted beyond the policy window and still reimbursed."],
+ ["H4.1-R2","4","High",74,"ia",-1,"Duplicate claim, same amount and date within a 60 day window."],
+ ["H4.2-R1","4","Medium",208,"biz",11,"Claim above the entitlement grade with no exception approval."],
+ ["H4.2-R2","4","Low",620,"biz",11,"Claim approved by a person who reports to the claimant."]],
+ itg:[
+ ["T1.1-R1","1","High",86,"ia",-1,"User account created without an approved access request."],
+ ["T1.1-R2","1","High",34,"ia",-1,"Leaver account still active beyond 7 days of the separation date."],
+ ["T1.2-R1","1","Medium",148,"biz",12,"Access retained after a role change with no re certification."],
+ ["T1.2-R2","1","Medium",62,"ia",-1,"Segregation of duties conflict active without a compensating control recorded."],
+ ["T2.1-R1","2","High",28,"ia",-1,"Privileged session used with no log review within the policy period."],
+ ["T2.1-R2","2","High",12,"ia",-1,"Privileged access granted permanently rather than for a defined window."],
+ ["T2.2-R1","2","Medium",46,"biz",13,"Generic or shared account in use without an identified owner."],
+ ["T2.2-R2","2","Medium",0,"ia",-1,"Direct table update in production by a privileged user."],
+ ["T3.1-R1","3","High",74,"ia",-1,"Transport moved to production without recorded testing and approval."],
+ ["T3.1-R2","3","Medium",96,"biz",12,"Emergency change not regularised within the policy window."],
+ ["T3.2-R1","3","Medium",148,"biz",12,"Developer able to move their own change into production."],
+ ["T3.2-R2","3","Low",312,"biz",12,"Change closed with no post implementation review recorded."],
+ ["T4.1-R1","4","High",18,"ia",-1,"Backup job failed with no rerun evidence within 24 hours."],
+ ["T4.1-R2","4","Medium",24,"biz",12,"Restore test not performed within the required frequency."],
+ ["T4.2-R1","4","Medium",0,"ia",-1,"Critical system without a defined recovery point objective."],
+ ["T4.2-R2","4","Low",62,"biz",12,"Backup retention shorter than the policy for a critical system."]],
+ cmp:[
+ ["C1.1-R1","1","High",24,"ia",-1,"Statutory return filed after the due date."],
+ ["C1.1-R2","1","Medium",48,"biz",16,"Return filed with a value differing from the books beyond tolerance."],
+ ["C1.2-R1","1","Medium",0,"ia",-1,"Statutory payment made after the due date, attracting interest."],
+ ["C2.1-R1","2","High",18,"ia",-1,"Licence or registration expired with operations continuing at that location."],
+ ["C2.1-R2","2","Medium",32,"biz",16,"Renewal not initiated within 60 days of expiry."],
+ ["C2.2-R1","2","Low",46,"biz",16,"Licence held in the name of a discontinued entity."],
+ ["C3.1-R1","3","High",38,"ia",-1,"Article despatched without a valid hallmark identification number."],
+ ["C3.1-R2","3","Medium",62,"biz",15,"Hallmark register not reconciled to despatch records for the period."],
+ ["C3.2-R1","3","Medium",0,"biz",15,"Purity certificate missing for a batch released to retail."],
+ ["C4.1-R1","4","High",12,"ia",-1,"Counterparty transacted without screening within the validity window."],
+ ["C4.1-R2","4","Medium",0,"ia",-1,"Screening hit closed without documented rationale."],
+ ["C4.2-R1","4","Low",24,"biz",17,"Third party screening older than the policy refresh period."]],
+ grc:[
+ ["G1.1-R1","1","Medium",18,"biz",17,"Risk not reviewed within the frequency defined for its rating."],
+ ["G1.1-R2","1","High",6,"ia",-1,"High rated risk without an assigned owner or a mitigation plan."],
+ ["G1.2-R1","1","Low",34,"biz",17,"Mitigation action overdue beyond the committed date."],
+ ["G2.1-R1","2","High",4,"ia",-1,"Whistleblower case open beyond the resolution timeline."],
+ ["G2.1-R2","2","Medium",0,"ia",-1,"Case closed without documented investigation evidence."],
+ ["G3.1-R1","3","Medium",28,"biz",17,"Third party operating without a current signed agreement."],
+ ["G3.1-R2","3","High",8,"ia",-1,"Third party with a related party linkage not declared."],
+ ["G3.2-R1","3","Low",12,"biz",17,"Due diligence refresh overdue for a high risk third party."],
+ ["G4.1-R1","4","Low",42,"biz",11,"Annual policy attestation not completed by the employee."],
+ ["G4.2-R1","4","Medium",0,"biz",11,"Conflict of interest declaration not refreshed for a designated role."]]};
+const RULES={}; Object.keys(RAW).forEach(k=>RULES[k]=RAW[k].map(R_));
+
+/* ================= record shapes ================= */
+const VENDORS=[["V-104882","Shree Balaji Metals"],["V-100437","Kirtilal Kalidas Refiners"],["V-118204","Precision Dial Works"],["V-107731","Hosur Toolings"],["V-129016","Aurum Bullion Traders"],["V-113558","Sundaram Packaging"],["V-102290","Vaibhav Gems and Alloys"],["V-125743","Coimbatore Precision"],["V-109865","Nandi Logistics"],["V-131402","Meridian Facility Management"],["V-106117","Sri Lakshmi Enterprises"],["V-121938","Deccan Electricals"],["V-114670","Trident Security Services"],["V-127085","Anand Casting Works"],["V-103326","Vishwa Polymers"],["V-119544","Rathna Stones and Findings"]];
+const CUSTOMERS=["Lifestyle Retail Ventures","Sagar Distributors","Kalyani Trade Links","Orion Mall Franchise","Prestige Retail LLP","Deccan Timepieces","Vision Optics Chain","Blue Wave Distributors","Nova Corporate Gifting","Sunrise Retail Partners"];
+const EMPS=["A Krishnan","S Fernandes","R Iyer","M Chatterjee","P Nair","T Sharma","V Balaji","N Fernandes","K Reddy","J Mathew"];
+const USERS=["RSRINIVAS","KMEHTA","PDESAI","AVENKAT","NRAO","SBANERJEE","MJOSHI","TIYENGAR","GKULKARNI","LDCRUZ"];
+const STORES=["BLR Jayanagar","BLR Indiranagar","CHN T Nagar","HYD Banjara Hills","MUM Andheri","MUM Bandra","DEL Karol Bagh","KOL Salt Lake","PUN Camp","CBE RS Puram"];
+const KARIGARS=["KG-1204 Hosur Unit 3","KG-1188 Kolkata Cluster","KG-1341 Coimbatore Cluster","KG-1276 Jaipur Cluster","KG-1092 Chennai Unit 1"];
+const PLANTS=["Hosur Plant 1","Hosur Plant 3","Pantnagar","Dehradun","Coimbatore","Chennai EyeCare"];
+const SYSTEMS=["SAP S/4HANA","Oracle EBS","Salesforce","SuccessFactors","Warehouse WMS","Retail POS"];
+/* kinds: id:PRE:BASE:RANGE, ven, vcode, cus, usr, sto, kar, pla, emp, sys, dat, val, wt, n:min:max:dec, pct:min:max, p:a|b|c, acc, cc */
+const SH=(c,g)=>({c,g});
+const SHAPES={
+ job:SH(["Job order","Karigar","Issued (g)","Received (g)","Issued on"],["id:JO:48000:9999","kar","wt","wt","dat"]),
+ stn:SH(["Transfer note","From store","To store","Net weight (g)","Despatched on"],["id:STN:90000:9999","sto","sto","wt","dat"]),
+ pv:SH(["Count sheet","Store","Purity","Variance (g)","Count date"],["id:PV:3000:999","sto","p:22K|18K|14K","n:0.6:4:3","dat"]),
+ og:SH(["Exchange invoice","Store","Weight (g)","Exchange value","Invoice date"],["id:OG:77000:9999","sto","n:12:96:3","val","dat"]),
+ si:SH(["Sales invoice","Store","Making charge %","Discount %","Invoice date"],["id:SI:556000:99999","sto","pct:8:14","pct:12:26","dat"]),
+ vendor:SH(["Vendor code","Vendor name","Created by","Created on","Unit"],["vcode","ven","usr","dat","pla"]),
+ req:SH(["Requisition","Requester","Cost centre","Value","Raised on"],["id:RQ-:2600000:99999","usr","cc","val","dat"]),
+ src:SH(["Sourcing event","Vendor","Award value","Buyer","Awarded on"],["id:RFQ-:7100:900","ven","val","usr","dat"]),
+ po:SH(["Purchase order","Vendor","Order value","Buyer","Order date"],["id:45:1000000:8999999","ven","val","usr","dat"]),
+ grn:SH(["Goods receipt","Order ref","Vendor","Posted by","Posted on"],["id:50:1000000:8999999","id:45:1000000:8999999","ven","usr","dat"]),
+ inv:SH(["Invoice","Vendor","Order ref","Invoice value","Invoice date"],["id:51:1000000:8999999","ven","id:45:1000000:8999999","val","dat"]),
+ pay:SH(["Payment doc","Vendor","Payment value","Run date","Released by"],["id:20:1000000:8999999","ven","val","dat","usr"]),
+ cust:SH(["Customer code","Customer name","Created by","Created on","Channel"],["id:C-:400000:99999","cus","usr","dat","p:Retail|Franchise|Institutional|Export"]),
+ credit:SH(["Customer","Credit limit","Exposure","Review due","Reviewed by"],["cus","val","val","dat","usr"]),
+ price:SH(["Condition record","Article","Price","Valid from","Maintained by"],["id:PR-:820000:99999","id:ART-:70000:9999","val","dat","usr"]),
+ order:SH(["Sales order","Customer","Order value","Channel","Order date"],["id:SO:3100000:899999","cus","val","p:Retail|Franchise|Institutional|Export","dat"]),
+ cinv:SH(["Customer invoice","Customer","Invoice value","Tax code","Invoice date"],["id:CI:9100000:899999","cus","val","p:GST 3 %|GST 5 %|GST 12 %|GST 18 %","dat"]),
+ recv:SH(["Open item","Customer","Outstanding","Days overdue","Due date"],["id:OI:660000:99999","cus","val","n:31:412:0","dat"]),
+ mvt:SH(["Movement doc","Material","Plant","Quantity","Posted on"],["id:49:1000000:8999999","id:MAT-:300000:99999","pla","n:1:940:0","dat"]),
+ cnt:SH(["Count doc","Storage location","Material","Variance value","Count date"],["id:CD:41000:9999","p:SL-01|SL-02|SL-04|SL-07","id:MAT-:300000:99999","val","dat"]),
+ bul:SH(["Bullion doc","Vault","Issued (g)","Returned (g)","Posted on"],["id:BL:22000:9999","p:Hosur Vault A|Hosur Vault B|Pantnagar Vault","wt","wt","dat"]),
+ slow:SH(["Stock line","Material","Ageing days","Carrying value","Last movement"],["id:SL:88000:9999","id:MAT-:300000:99999","n:366:1240:0","val","dat"]),
+ jnl:SH(["Journal","Account","Value","Posted by","Posting date"],["id:JV:1400000:899999","acc","val","usr","dat"]),
+ recon:SH(["Reconciliation","Account","Open value","Prepared by","Period"],["id:RC:12000:999","acc","val","usr","p:Jun 2026|Jul 2026|Aug 2026"]),
+ ico:SH(["Intercompany doc","Counterparty","Value","Raised by","Posting date"],["id:IC:31000:9999","p:TTN-JWL|TTN-WCH|TTN-TEA|TTN-COR","val","usr","dat"]),
+ close:SH(["Close task","Owner","Scheduled","Completed","Period"],["id:CT:2100:999","usr","dat","dat","p:Jun 2026|Jul 2026|Aug 2026"]),
+ asset:SH(["Asset code","Description","Gross value","Capitalised on","Location"],["id:AS-:600000:99999","p:Plant machinery|Retail fit out|IT equipment|Furniture","val","dat","pla"]),
+ prod:SH(["Production order","Material","Plant","Order quantity","Finish date"],["id:PO:71000:9999","id:MAT-:300000:99999","pla","n:10:940:0","dat"]),
+ yld:SH(["Yield record","Process","Standard %","Actual %","Recorded on"],["id:YR:52000:9999","p:Casting|Polishing|Assembly|Plating","pct:92:99","pct:78:95","dat"]),
+ qc:SH(["Inspection lot","Material","Plant","Rejected %","Inspection date"],["id:QL:36000:9999","id:MAT-:300000:99999","pla","pct:1:18","dat"]),
+ scon:SH(["Challan","Subcontractor","Material issued (g)","Days open","Issued on"],["id:SC:19000:9999","ven","wt","n:12:240:0","dat"]),
+ emp:SH(["Employee code","Name","Function","Joined on","Location"],["id:E-:200000:99999","emp","p:Retail|Manufacturing|Finance|IT|HR","dat","pla"]),
+ pay2:SH(["Payroll line","Employee","Gross pay","Variance %","Period"],["id:PL:900000:99999","emp","val","pct:8:42","p:Jun 2026|Jul 2026|Aug 2026"]),
+ att:SH(["Attendance record","Employee","Hours","Regularised by","Date"],["id:AT:1200000:899999","emp","n:6:16:1","usr","dat"]),
+ exp:SH(["Claim","Employee","Claim value","Category","Submitted on"],["id:EX:340000:99999","emp","val","p:Travel|Lodging|Client meeting|Local conveyance","dat"]),
+ usr:SH(["Account","User name","System","Role","Created on"],["id:U-:80000:9999","emp","sys","p:Buyer|AP Clerk|Store Manager|Admin|Approver","dat"]),
+ priv:SH(["Session","User","System","Duration (hrs)","Session date"],["id:PS:14000:999","usr","sys","n:1:9:1","dat"]),
+ chg:SH(["Transport","Description","System","Moved by","Moved on"],["id:TR:26000:999","p:Pricing routine|Interface fix|Report change|Role update","sys","usr","dat"]),
+ bkp:SH(["Backup job","System","Result","Retention (days)","Run date"],["id:BK:9100:999","sys","p:Failed|Partial|Completed late","n:7:90:0","dat"]),
+ fil:SH(["Filing","Statute","Entity","Due date","Filed on"],["id:FL:5200:999","p:GST return|TDS return|PF return|ESI return","p:TTN-JWL|TTN-WCH|TTN-TEA|TTN-COR","dat","dat"]),
+ lic:SH(["Licence","Type","Location","Valid to","Status"],["id:LC:3100:999","p:Trade licence|Fire safety|Weights and measures|Shops and establishments","pla","dat","p:Expired|Expiring|Under renewal"]),
+ hm:SH(["Batch","Article","Purity","Despatched on","Hallmark number"],["id:HB:64000:9999","id:ART-:70000:9999","p:22K|18K|14K","dat","p:Not recorded|Mismatch|Pending"]),
+ scr:SH(["Screening","Counterparty","Type","Screened on","Result"],["id:SR:47000:9999","ven","p:Vendor|Customer|Third party","dat","p:Hit not cleared|Not screened|Refresh overdue"]),
+ risk:SH(["Risk","Category","Rating","Owner","Last reviewed"],["id:RK:1100:999","p:Operational|Financial|Regulatory|Technology","p:High|Medium|Low","usr","dat"]),
+ case:SH(["Case","Category","Raised on","Days open","Status"],["id:CS:800:499","p:Conflict of interest|Vendor conduct|Workplace|Financial","dat","n:31:180:0","p:Under investigation|Awaiting evidence"]),
+ tp:SH(["Third party","Category","Spend","Agreement to","Risk rating"],["id:TP:2400:999","p:Logistics|Consulting|Facility|Technology","val","dat","p:High|Medium|Low"]),
+ att2:SH(["Attestation","Employee","Policy","Due date","Status"],["id:AA:71000:9999","emp","p:Code of conduct|Insider trading|Data privacy|Anti bribery","dat","p:Not started|Overdue"])};
+const NUMK=k=>/^(id:|dat|val|wt|n:|pct:|acc|cc|vcode)/.test(k);
+
+/* generic findings per sub process, used where a rule has no specific list */
+const SUBFIND={
+ "o2c|1":["Registration document not on file","Change made by a single user","Dormant beyond policy, still active"],
+ "o2c|2":["Limit exceeded by 34 %","Override applied with no approver recorded","Review overdue by 96 days"],
+ "o2c|3":["Price 9 % below approved floor","Scheme validity expired at billing","Condition maintained outside pricing team"],
+ "o2c|4":["Despatched before payment received","Order value amended after despatch","Customer flagged for deletion"],
+ "o2c|5":["No despatch document against invoice","Credit note above approval limit","Tax code inconsistent with article"],
+ "o2c|6":["Receipt applied to wrong invoice","Write off above delegated limit","Open beyond 180 days, no follow up"],
+ "inv|1":["No reference document on movement","Reason code blank","Reversal within 24 hours, no reason"],
+ "inv|2":["Variance beyond tolerance, no approval","Counted by the custodian","Location overdue in count calendar"],
+ "inv|3":["Issue and return differ by 3.240 g","Movement outside vault access window","Dual custody not assigned"],
+ "inv|4":["Ageing 412 days, no provision","Reclassified without rationale","Write off without authorisation"],
+ "r2r|1":["Posted and approved by the same user","Restricted account, no authorisation","Weekend posting, no supporting note"],
+ "r2r|2":["Not completed within close calendar","Prepared and reviewed by same person","Item open beyond 90 days"],
+ "r2r|3":["Counterparty balance not matched","Rate outside transfer pricing agreement","Settlement beyond agreed cycle"],
+ "r2r|4":["Task completed after close date","Posting into a locked period","Accrual carried three periods"],
+ "r2r|5":["No capital authorisation on file","Depreciation partially run","Retired without verification evidence"],
+ "plt|1":["Confirmed without goods issue","Closed with variance beyond tolerance","Confirmed after scheduled finish"],
+ "plt|2":["Yield 8 points below standard","Wastage above precious metal norm","Rework not linked to original order"],
+ "plt|3":["Result not recorded on release","Usage decision by the inspector","Rejection above supplier norm"],
+ "plt|4":["Challan open 214 days","Issue beyond order quantity","Receipt without challan reference"],
+ "hrp|1":["No requisition or offer reference","Bank change close to payroll run","Bank account shared with another employee"],
+ "hrp|2":["Paid after separation date","Variance 28 % against prior period","Overtime above statutory ceiling"],
+ "hrp|3":["Regularised without supervisor approval","Leave taken without balance","Gate pass not on record"],
+ "hrp|4":["Submitted beyond policy window","Duplicate amount and date","Above entitlement grade, no approval"],
+ "itg|1":["No approved access request","Leaver active 19 days after exit","Access retained after role change"],
+ "itg|2":["Session log not reviewed","Access granted with no end date","Shared account with no owner"],
+ "itg|3":["Moved with no test evidence","Emergency change not regularised","Developer moved own change"],
+ "itg|4":["Job failed, no rerun evidence","Restore test overdue","Retention below policy"],
+ "cmp|1":["Filed 11 days after due date","Value differs from books","Payment after due date"],
+ "cmp|2":["Expired, operations continuing","Renewal not initiated","Held in a discontinued entity name"],
+ "cmp|3":["Hallmark number not recorded","Register not reconciled to despatch","Purity certificate missing"],
+ "cmp|4":["Not screened within validity","Hit closed without rationale","Refresh overdue"],
+ "grc|1":["Not reviewed within frequency","High risk without owner","Action overdue by 64 days"],
+ "grc|2":["Open beyond resolution timeline","Closed without investigation evidence"],
+ "grc|3":["No current signed agreement","Related party linkage not declared","Due diligence refresh overdue"],
+ "grc|4":["Attestation not completed","Declaration not refreshed"]};
+const FINDINGS={
+ "1.1-R1":["GST certificate not attached","Bank proof missing","PAN copy not re verified"],
+ "1.1-R2":["Creator and requester are the same user","Creator holds active payable role"],
+ "1.2-R1":["Call back log not recorded","Confirmation after activation date"],
+ "1.2-R2":["Bank change by a single user","Dual control bypassed under emergency flag"],
+ "1.3-R1":["No posting since 2024-09","Dormant beyond policy, no review"],
+ "1.3-R2":["Same tax ID on two vendor codes","Bank account matches an active vendor"],
+ "2.1-R1":["Approved at level 2, requires level 3","Approver limit exceeded by 41 %"],
+ "2.1-R2":["Requester and approver are the same user","Approved by a direct report"],
+ "2.2-R2":["Value revised upward 28 % post approval","Line added after approval"],
+ "2.3-R1":["Approval dated after the order","Retrospective approval, 9 day gap"],
+ "3.1-R1":["Single quote on record, three required","Two quotes, band requires four"],
+ "3.1-R2":["Emergency code used, no sign off","Justification field blank"],
+ "3.2-R2":["Sourcing certificate lapsed","Assessment overdue at award date"],
+ "4.1-R1":["No linked requisition","Rate contract expired before order date"],
+ "4.1-R2":["3 orders to same vendor in 5 days","Split across cost centres"],
+ "4.2-R1":["Price 12 % above contracted rate","Variance not documented"],
+ "4.3-R1":["Order dated after goods receipt","Order raised after invoice booked"],
+ "4.3-R2":["Quantity revised post receipt","Value amended after first delivery"],
+ "5.1-R1":["Received exceeds order by 8 %","Short receipt 14 %, no closure note"],
+ "5.1-R2":["Posted by the buyer who raised the order","Poster also approved the requisition"],
+ "5.2-R2":["Line already fully received","Second receipt against a closed line"],
+ "5.3-R1":["Receipt and invoice on the same day","No inspection record attached"],
+ "6.1-R1":["No goods receipt found","Match blocked, released manually"],
+ "6.1-R2":["Same amount and reference in 21 days","Duplicate reference, same vendor"],
+ "6.2-R1":["Category requires an order, none present","Non order invoice above threshold"],
+ "6.2-R2":["Invoice exceeds order by 19 %","Variation not approved"],
+ "6.3-R2":["Tax category inconsistent with vendor","Code mapping does not match the line"],
+ "7.1-R1":["Bank detail changed 6 days before run","No independent verification"],
+ "7.2-R1":["Released 22 days ahead of term","Outside the payment calendar"],
+ "7.3-R2":["Single approval above dual control limit","Second authoriser not recorded"],
+ "J1.1-R1":["Return short by 2.140 g","Wastage 3.20 % against norm of 1.80 %"],
+ "J1.1-R2":["Open 61 days, no extension","Open 78 days, karigar not responding"],
+ "J1.2-R1":["Wastage above norm, no approval","Deviation approved after return date"],
+ "J2.1-R1":["In transit 12 days, no receipt","Despatch acknowledged, receipt not confirmed"],
+ "J2.1-R2":["In transit 34 days, no investigation","Past escalation age, not reported"],
+ "J2.2-R1":["Received short by 1.860 g","Received exceeds despatch by 0.940 g"],
+ "J3.1-R1":["Variance 2.340 g against 0.500 g","Value variance 68,400, no explanation"],
+ "J3.1-R2":["Counted by the stock custodian","Sheet uploaded 9 days late"],
+ "J4.1-R1":["Meter purity 91.2, valued at 92.0","Meter reading not captured"],
+ "J4.1-R2":["Exchange 2.4 L, no second approval","Approval field blank above threshold"],
+ "J4.2-R1":["Deduction 4 % above slab","Slab for purity band not applied"],
+ "J5.1-R1":["Discount 24 % against slab of 10 %","Override without regional approval"]};
+
+/* ================= generation ================= */
+function lcg(s){let x=s>>>0;return()=>((x=(x*1664525+1013904223)>>>0)/4294967296)}
+function hash(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+const pad=(n,w)=>String(n).padStart(w,"0");
+const nf=n=>Math.round(n).toLocaleString("en-IN");
+const inr=v=>v>=10000000?"\u20B9"+(v/10000000).toFixed(2)+" Cr":"\u20B9"+(v/100000).toFixed(2)+" L";
+const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const areaById=id=>AREAS.find(a=>a.id===id);
+const divById=id=>DIVS.find(d=>d.id===id);
+function share(a,divId){
+  if(!divId) return 1;
+  if(!a.divs.includes(divId)) return 0;
+  const tot=a.divs.reduce((x,d)=>x+divById(d).w,0);
+  return divById(divId).w/tot;
+}
+function cell(kind,r,divCode){
+  if(kind.startsWith("id:")){const p=kind.split(":");return p[1]+(parseInt(p[2])+Math.floor(r()*parseInt(p[3])))}
+  if(kind.startsWith("n:")){const p=kind.split(":");return (parseFloat(p[1])+r()*(parseFloat(p[2])-parseFloat(p[1]))).toFixed(parseInt(p[3]))}
+  if(kind.startsWith("pct:")){const p=kind.split(":");return (parseFloat(p[1])+r()*(parseFloat(p[2])-parseFloat(p[1]))).toFixed(1)}
+  if(kind.startsWith("p:")){const o=kind.slice(2).split("|");return o[Math.floor(r()*o.length)]}
+  switch(kind){
+    case "ven":return VENDORS[Math.floor(r()*VENDORS.length)][1];
+    case "vcode":return VENDORS[Math.floor(r()*VENDORS.length)][0];
+    case "cus":return CUSTOMERS[Math.floor(r()*CUSTOMERS.length)];
+    case "emp":return EMPS[Math.floor(r()*EMPS.length)];
+    case "usr":return USERS[Math.floor(r()*USERS.length)];
+    case "sto":return STORES[Math.floor(r()*STORES.length)];
+    case "kar":return KARIGARS[Math.floor(r()*KARIGARS.length)];
+    case "pla":return PLANTS[Math.floor(r()*PLANTS.length)];
+    case "sys":return SYSTEMS[Math.floor(r()*SYSTEMS.length)];
+    case "dat":return "2026-"+pad(1+Math.floor(r()*8),2)+"-"+pad(1+Math.floor(r()*28),2);
+    case "val":return inr(Math.round((.4+r()*62)*100000));
+    case "wt":return (r()*400+120).toFixed(3);
+    case "acc":return String(400000+Math.floor(r()*99999));
+    case "cc":return "CC-"+(4100+Math.floor(r()*400));
+    default:return "";
+  }
+}
+const POOL={};
+function rowsFor(areaId,rule){
+  const key=areaId+"|"+rule.id;
+  if(POOL[key]) return POOL[key];
+  const sub=SUBS[areaId].find(s=>s.id===rule.sub), area=areaById(areaId), shape=SHAPES[sub.shape];
+  const r=lcg(hash(areaId+rule.id));
+  const finds=FINDINGS[rule.id]||SUBFIND[areaId+"|"+rule.sub]||["Exception raised by rule logic"];
+  const out=[], count=Math.min(18,rule.failed);
+  for(let i=0;i<count;i++){
+    const pool=area.divs, tot=pool.reduce((x,d)=>x+divById(d).w,0);
+    let t=r()*tot, div=pool[0];
+    for(const d of pool){t-=divById(d).w; if(t<=0){div=d;break}}
+    const roll=r();
+    const sev=rule.sev==="High"?(roll>.22?"High":"Medium"):rule.sev==="Medium"?(roll>.68?"High":roll>.2?"Medium":"Low"):(roll>.82?"Medium":"Low");
+    const cells=shape.g.map(k=>cell(k,r,divById(div).code));
+    const sr=r();
+    const status=sr<.5?"Open":sr<.72?"Assigned":sr<.88?"Responded":"Closed";
+    const owner=status==="Open"?(rule.mon==="biz"?rule.own:""):(rule.own||OWNERS[Math.floor(r()*OWNERS.length)]);
+    out.push({key:key+"|"+i,ref:rule.id+"-"+pad(i+1,3),ruleId:rule.id,ruleD:rule.d,areaId,div,
+      subName:sub.name,shape:sub.shape,cells,mon:rule.mon,
+      finding:finds[Math.floor(r()*finds.length)],sev,age:1+Math.floor(r()*96),
+      value:inr(Math.round((.4+r()*62)*100000)),status,owner,due:status==="Open"?"":"05 Sep 2026",
+      trail:status==="Open"?[]:status==="Assigned"?[["23 Aug 2026","Assigned for explanation"]]:
+        status==="Responded"?[["21 Aug 2026","Assigned for explanation"],["25 Aug 2026","Process owner responded, awaiting audit review"]]:
+        [["12 Aug 2026","Assigned for explanation"],["18 Aug 2026","Process owner responded"],["22 Aug 2026","Closed by audit, corrective action agreed"]]});
+  }
+  POOL[key]=out;return out;
+}
+let ALL=null;
+function allRows(){
+  if(ALL) return ALL;
+  ALL=[];
+  AREAS.forEach(a=>RULES[a.id].filter(r=>r.failed>0).forEach(r=>ALL.push(...rowsFor(a.id,r))));
+  return ALL;
+}
+
+/* ================= state ================= */
+const S={view:"status",persona:"ia",div:"",area:"",sub:"",rule:null,status:"All",sev:"All",hero:true};
+function scopedRows(){
+  let rows=allRows();
+  if(S.div) rows=rows.filter(r=>r.div===S.div);
+  if(S.area) rows=rows.filter(r=>r.areaId===S.area);
+  if(S.sub) rows=rows.filter(r=>RULES[r.areaId].find(x=>x.id===r.ruleId).sub===S.sub);
+  if(S.persona==="biz") rows=rows.filter(r=>r.mon==="biz");
+  if(S.status!=="All") rows=rows.filter(r=>r.status===S.status);
+  if(S.sev!=="All") rows=rows.filter(r=>r.sev===S.sev);
+  return rows;
+}
+function areaAgg(a,divId){
+  const sh=share(a,divId);
+  const rs=RULES[a.id].filter(r=>S.persona!=="biz"||r.mon==="biz");
+  return {controls:rs.length, ok:rs.filter(r=>r.failed===0).length,
+    tested:SUBS[a.id].reduce((x,s)=>x+s.population,0)*sh,
+    ex:rs.reduce((x,r)=>x+r.failed,0)*sh,
+    biz:RULES[a.id].filter(r=>r.mon==="biz").length};
+}
+const areaCadence=a=>{const c=[...new Set(SUBS[a.id].map(s=>s.cadence))];return c.length===1?c[0]:c[0]+" and "+c.slice(1).join(", ").toLowerCase()};
+const areaLast=a=>SUBS[a.id].map(s=>s.last).sort().reverse().find(x=>x.startsWith("27"))||SUBS[a.id][0].last;
+
+/* ================= pieces ================= */
+function rail({tested,total,failed,h=10,cap=true,left,right}){
+  const cov=total>0?(tested/total)*100:0, fp=tested>0?(failed/tested)*cov:0, pp=cov-fp;
+  return `<div><div class="rail-track" style="--h:${h}px">
+    <div class="rail-fill" style="width:${cov}%"><div class="rail-pass" style="width:${cov?(pp/cov)*100:0}%"></div><div class="rail-fail" style="width:${cov?(fp/cov)*100:0}%"></div></div>
+    ${cov<100?`<div class="rail-untested" style="width:${100-cov}%"></div>`:""}<div class="rail-ticks"></div></div>
+    ${cap?`<div class="rail-cap"><span>${left||"<b>"+cov.toFixed(0)+" %</b> tested"}</span><span>${right||"<b>"+nf(failed)+"</b> exceptions of "+nf(tested)}</span></div>`:""}</div>`;
+}
+const sevChip=v=>`<span class="chip ${v==="High"?"hi":v==="Medium"?"me":"lo"}"><span class="dot"></span>${v}</span>`;
+const okChip=ok=>`<span class="chip ${ok?"ok":"no"}"><span class="dot"></span>${ok?"Clean":"Exceptions"}</span>`;
+const stChip=s=>`<span class="chip ${s.toLowerCase()}"><span class="dot"></span>${s}</span>`;
+const monChip=(m,own)=>m==="biz"?`<span class="chip biz"><span class="dot"></span>${own?esc(own.split(",")[0]):"Business"}</span>`:'<span class="chip ia"><span class="dot"></span>Internal audit</span>';
+
+/* ================= views ================= */
+function vHero(){
+  return `<div style="max-width:1180px">
+    <div class="eyebrow">Continuous control testing</div>
+    <h1 class="h1" style="max-width:16ch">Every transaction, every control, every day.</h1>
+    <p class="sub">Internal audit tests a sample and signs off on the whole. This tests the whole, overnight, across every division. The rules are yours, they run on your own platform, and each control can be handed to the business owner to watch once it is stable.</p>
+    <div class="cmp">
+      <div class="cmp-row a"><div class="cmp-lbl"><span>Quarterly sample testing</span><span class="v">5 %</span></div>${rail({tested:5,total:100,failed:1,h:14,cap:false})}</div>
+      <div class="cmp-row b"><div class="cmp-lbl"><span>Continuous population testing</span><span class="v">100 %</span></div>${rail({tested:100,total:100,failed:9,h:14,cap:false})}</div>
+      <div class="rail-cap" style="margin-top:14px"><span>Solid rail is tested population, hatched is untested</span><span>Red segment is the exception rate</span></div>
+    </div>
+    <div style="margin-top:34px"><button class="btn" id="enter">Open live control status</button></div>
+    <div class="foot"><span>Demonstration build, all figures illustrative</span><span>Dhiren.Abraham@netscribes.com</span></div></div>`;
+}
+
+function vStatus(){
+  if(S.rule) return vRule();
+  const areas=AREAS.filter(a=>!S.div||a.divs.includes(S.div)).filter(a=>!S.area||a.id===S.area);
+  let ctl=0,ok=0,tested=0,ex=0,handed=0;
+  areas.forEach(a=>{const g=areaAgg(a,S.div);ctl+=g.controls;ok+=g.ok;tested+=g.tested;ex+=g.ex;handed+=g.biz});
+  const stats=`<div class="stats">
+    <div class="stat"><div class="stat-k">Controls monitored</div><div class="stat-v">${nf(ctl)}</div><div class="stat-n">${S.div?esc(divById(S.div).name):"group wide"}</div></div>
+    <div class="stat"><div class="stat-k">Clean at last run</div><div class="stat-v pass">${nf(ok)}</div><div class="stat-n">no exception outstanding</div></div>
+    <div class="stat"><div class="stat-k">Carrying exceptions</div><div class="stat-v fail">${nf(ctl-ok)}</div><div class="stat-n">${nf(ex)} open items</div></div>
+    <div class="stat"><div class="stat-k">Population coverage</div><div class="stat-v">100 %</div><div class="stat-n">${nf(tested)} records</div></div>
+    <div class="stat"><div class="stat-k">Handed to business</div><div class="stat-v acc">${nf(handed)}</div><div class="stat-n">watched by process owners</div></div></div>`;
+
+  let divTable="";
+  if(!S.div){
+    const rows=DIVS.map((d,i)=>{
+      let dc=0,dok=0,dt_=0,dex=0;
+      AREAS.filter(a=>a.divs.includes(d.id)).filter(a=>!S.area||a.id===S.area).forEach(a=>{
+        const g=areaAgg(a,d.id);dc+=g.controls;dok+=g.ok;dt_+=g.tested;dex+=g.ex});
+      if(!dc) return "";
+      return `<tr class="click ${i%2?"zebra":""}" data-div="${d.id}">
+        <td class="rid">${d.code}</td><td><b>${esc(d.name)}</b><div class="dim2" style="font-size:11px">${esc(d.note)}</div></td>
+        <td class="mono dim">${d.erp}</td><td class="num dim">${dc}</td>
+        <td class="num" style="color:var(--pass)">${dok}</td><td class="num" style="color:var(--red)">${nf(dex)}</td>
+        <td class="num dim">${nf(dt_)}</td><td style="padding-top:14px;min-width:150px">${rail({tested:dt_,total:dt_,failed:dex,h:7,cap:false})}</td>
+        <td class="mono dim2">27 Aug 06:47</td></tr>`;}).join("");
+    divTable=`<div class="tbl-wrap" style="margin-top:16px"><div class="tbl-scroll"><table>
+      <thead><tr><th style="width:88px">Division</th><th>Name</th><th style="width:120px">Source</th>
+      <th class="num" style="width:82px">Controls</th><th class="num" style="width:66px">Clean</th>
+      <th class="num" style="width:92px">Exceptions</th><th class="num" style="width:104px">Records</th>
+      <th style="width:160px">Position</th><th style="width:106px">Last tested</th></tr></thead>
+      <tbody>${rows}</tbody></table></div>
+      <div style="padding:10px 13px;border-top:1px solid var(--line-soft)" class="mono dim2">Select a division to filter everything below it</div></div>`;
+  }
+
+  const arows=areas.map((a,i)=>{const g=areaAgg(a,S.div);
+    return `<tr class="click ${i%2?"zebra":""}" data-area="${a.id}">
+      <td class="rid">${a.code}</td><td><b>${esc(a.name)}</b><div class="dim2" style="font-size:11px">${esc(a.note)}</div></td>
+      <td class="num dim">${g.controls}</td><td class="num" style="color:var(--pass)">${g.ok}</td>
+      <td class="num" style="color:var(--red)">${nf(g.ex)}</td><td class="num dim2">${g.biz}</td>
+      <td style="padding-top:14px;min-width:150px">${rail({tested:g.tested,total:g.tested,failed:g.ex,h:7,cap:false})}</td>
+      <td class="mono dim2">${areaCadence(a)}</td><td class="mono dim2">${areaLast(a)}</td></tr>`;}).join("");
+  const areaTable=`<div class="tbl-wrap" style="margin-top:14px"><div class="tbl-scroll"><table>
+    <thead><tr><th style="width:66px">Area</th><th>Control area</th>
+    <th class="num" style="width:82px">Controls</th><th class="num" style="width:66px">Clean</th>
+    <th class="num" style="width:92px">Exceptions</th><th class="num" style="width:100px">With business</th>
+    <th style="width:160px">Position</th><th style="width:132px">Cadence</th><th style="width:106px">Last tested</th></tr></thead>
+    <tbody>${arows}</tbody></table></div>
+    <div style="padding:10px 13px;border-top:1px solid var(--line-soft)" class="mono dim2">Select a control area to see its rules</div></div>`;
+
+  let ruleTable="";
+  if(S.area){
+    const a=areaById(S.area), sh=share(a,S.div);
+    ruleTable=`<div class="tbl-wrap" style="margin-top:14px"><div class="tbl-scroll"><table>
+      <thead><tr><th style="width:84px">Rule</th><th>Control</th><th style="width:106px">Status</th>
+      <th style="width:136px">Monitored by</th><th class="num" style="width:92px">Population</th>
+      <th class="num" style="width:86px">Exceptions</th><th style="width:88px">Rate</th>
+      <th style="width:92px">Cadence</th><th style="width:104px">Last tested</th></tr></thead><tbody>
+      ${SUBS[a.id].filter(s=>!S.sub||s.id===S.sub).map(s=>{
+        const rs=RULES[a.id].filter(r=>r.sub===s.id).filter(r=>S.persona!=="biz"||r.mon==="biz");
+        if(!rs.length) return "";
+        const pop=s.population*sh;
+        return `<tr class="grp"><td colspan="9">${s.id}. ${esc(s.name)} &nbsp;·&nbsp; ${nf(pop)} ${s.object} in scope</td></tr>`+
+        rs.map((r,i)=>{const f=r.failed*sh, rate=pop?f/pop*100:0;
+          return `<tr class="click ${i%2?"zebra":""}" data-rule="${a.id}|${r.id}">
+            <td class="rid">${r.id}</td><td>${esc(r.d)}</td><td>${okChip(r.failed===0)}</td>
+            <td>${monChip(r.mon,r.own)}</td><td class="num dim">${nf(pop)}</td>
+            <td class="num" style="color:${r.failed?"var(--red)":"var(--muted2)"}">${r.failed?nf(f):"&mdash;"}</td>
+            <td style="padding-top:13px">${rail({tested:pop,total:pop,failed:f,h:6,cap:false})}
+              <div class="mono dim2" style="font-size:9.5px;margin-top:5px">${rate===0?"0 %":rate.toFixed(rate<1?2:1)+" %"}</div></td>
+            <td class="mono dim2">${s.cadence}</td><td class="mono dim2">${s.last}</td></tr>`}).join("");
+      }).join("")}</tbody></table></div>
+      <div style="padding:10px 13px;border-top:1px solid var(--line-soft)" class="mono dim2">Select a control to see the transactions that failed it</div></div>`;
+  }
+  return `<div class="eyebrow">${S.persona==="biz"?"Process owner view":"Group wide"}</div>
+    <h2 class="h2">${S.div?esc(divById(S.div).name):"All divisions"}${S.area?", "+esc(areaById(S.area).name):""}</h2>
+    <p class="sub">${S.persona==="biz"
+      ? "Only the controls handed to a process owner appear here. Each owner sees their own exceptions and clears them without waiting for an audit to be scheduled."
+      : "Every control that runs against the group, with the position as at the last run. Nothing here waits for an audit cycle."}</p>
+    ${stats}${divTable}${areaTable}${ruleTable}`;
+}
+
+function vRule(){
+  const [aid,rid]=S.rule.split("|");
+  const a=areaById(aid), r=RULES[aid].find(x=>x.id===rid), s=SUBS[aid].find(x=>x.id===r.sub);
+  const sh=share(a,S.div), pop=s.population*sh, f=r.failed*sh;
+  let rows=rowsFor(aid,r); if(S.div) rows=rows.filter(x=>x.div===S.div);
+  if(S.status!=="All") rows=rows.filter(x=>x.status===S.status);
+  if(S.sev!=="All") rows=rows.filter(x=>x.sev===S.sev);
+  const shape=SHAPES[s.shape];
+  const head=`<div class="eyebrow">${a.code} &nbsp;·&nbsp; ${r.sub}. ${esc(s.name)}</div>
+    <h2 class="h2" style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+      <span class="rid" style="font-size:19px">${r.id}</span>${okChip(r.failed===0)}${sevChip(r.sev)}${monChip(r.mon,r.own)}</h2>
+    <div class="rule-box" style="margin-top:14px;max-width:84ch"><div class="h">Control as written by internal audit</div>${esc(r.d)}</div>
+    <div class="stats">
+      <div class="stat"><div class="stat-k">Population</div><div class="stat-v">${nf(pop)}</div><div class="stat-n">${s.object}</div></div>
+      <div class="stat"><div class="stat-k">Tested</div><div class="stat-v">${nf(pop)}</div><div class="stat-n">100 % of population</div></div>
+      <div class="stat"><div class="stat-k">Clean</div><div class="stat-v pass">${nf(pop-f)}</div><div class="stat-n">no exception</div></div>
+      <div class="stat"><div class="stat-k">Exceptions</div><div class="stat-v fail">${nf(f)}</div><div class="stat-n">${pop?((f/pop)*100).toFixed(f/pop<.01?2:1):0} % rate</div></div>
+      <div class="stat"><div class="stat-k">Last tested</div><div class="stat-v" style="font-size:20px">${s.last}</div><div class="stat-n">${s.cadence.toLowerCase()} run</div></div></div>
+    <div style="margin-top:18px">${rail({tested:pop,total:pop,failed:f,h:12})}</div>`;
+  if(r.failed===0) return head+`<div class="card" style="margin-top:20px"><div class="card-b">
+    <div class="mono dim2" style="font-size:10px;letter-spacing:.13em;text-transform:uppercase">No exceptions</div>
+    <div style="font-family:var(--disp);font-weight:700;font-size:19px;color:var(--pass);margin-top:6px">All ${nf(pop)} ${s.object} passed this control at the last run.</div>
+    <div class="note" style="margin-top:6px">The full population was tested on ${s.last} and the run is recorded in the evidence log.</div></div></div>
+    <div class="foot"><span></span><button class="mono" id="backRule" style="color:var(--red);font-size:10.5px">Back to control list</button></div>`;
+  return head+`
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:24px;gap:10px;flex-wrap:wrap">
+      <div class="eyebrow">Exceptions raised</div>
+      <div class="mono dim2" style="font-size:10px">Showing ${rows.length} sample records, select a row to route it</div></div>
+    <div class="tbl-wrap" style="margin-top:10px"><div class="tbl-scroll"><table>
+      <thead><tr><th style="width:76px">Division</th>${shape.c.map((c,i)=>`<th class="${NUMK(shape.g[i])?"num":""}">${c}</th>`).join("")}
+      <th>Finding</th><th style="width:100px">Severity</th><th class="num" style="width:60px">Age</th><th style="width:118px">Status</th></tr></thead>
+      <tbody>${rows.map((row,i)=>`<tr class="click ${i%2?"zebra":""}" data-row="${row.key}">
+        <td class="mono dim2">${divById(row.div).code.replace("TTN-","")}</td>
+        ${row.cells.map((c,j)=>`<td class="${NUMK(shape.g[j])?"num dim":""}">${esc(c)}</td>`).join("")}
+        <td>${esc(row.finding)}</td><td>${sevChip(row.sev)}</td>
+        <td class="num" style="${row.age>21&&row.status!=="Closed"?"color:var(--red)":"color:var(--muted2)"}">${row.age}d</td>
+        <td>${stChip(row.status)}</td></tr>`).join("")||`<tr><td colspan="${shape.c.length+5}" class="dim2" style="padding:18px">Nothing matches the current filters.</td></tr>`}</tbody></table></div></div>
+    <div class="foot"><span>Each row carries the run date, the rule version and the tested value into the evidence log</span>
+      <button class="mono" id="backRule" style="color:var(--red);font-size:10.5px">Back to control list</button></div>`;
+}
+
+function vWorklist(){
+  const rows=scopedRows().sort((a,b)=>b.age-a.age), show=rows.slice(0,80);
+  const breach=rows.filter(r=>r.age>21&&r.status!=="Closed").length;
+  return `<div class="eyebrow">Exception routing</div><h2 class="h2">Exception worklist</h2>
+  <p class="sub">${S.persona==="biz"?"The exceptions sitting with process owners on the controls that have been handed over. This is what replaces the audit exception email."
+    :"Every exception in scope, who it sits with, when a response is due and how long it has been open."}</p>
+  <div class="stats">
+    <div class="stat"><div class="stat-k">In list</div><div class="stat-v">${nf(rows.length)}</div><div class="stat-n">after filters</div></div>
+    <div class="stat"><div class="stat-k">Past escalation age</div><div class="stat-v fail">${breach}</div><div class="stat-n">older than 21 days</div></div>
+    <div class="stat"><div class="stat-k">Awaiting audit review</div><div class="stat-v">${rows.filter(r=>r.status==="Responded").length}</div><div class="stat-n">owner has replied</div></div>
+    <div class="stat"><div class="stat-k">Not yet assigned</div><div class="stat-v">${rows.filter(r=>!r.owner).length}</div><div class="stat-n">no owner set</div></div>
+    <div class="stat"><div class="stat-k">Closed</div><div class="stat-v pass">${rows.filter(r=>r.status==="Closed").length}</div><div class="stat-n">action agreed</div></div></div>
+  <div class="tbl-wrap" style="margin-top:16px"><div class="tbl-scroll"><table>
+    <thead><tr><th style="width:102px">Reference</th><th style="width:68px">Division</th><th style="width:76px">Rule</th>
+    <th>Finding</th><th style="width:124px">Monitored by</th><th style="width:92px">Severity</th>
+    <th class="num" style="width:58px">Age</th><th>Owner</th><th style="width:100px">Due</th><th style="width:114px">Status</th></tr></thead>
+    <tbody>${show.map((r,i)=>`<tr class="click ${i%2?"zebra":""}" data-row="${r.key}">
+      <td class="mono dim">${r.ref}</td><td class="mono dim2">${divById(r.div).code.replace("TTN-","")}</td>
+      <td class="rid">${r.ruleId}</td><td>${esc(r.finding)}</td>
+      <td>${monChip(r.mon,r.owner)}</td><td>${sevChip(r.sev)}</td>
+      <td class="num" style="${r.age>21&&r.status!=="Closed"?"color:var(--red)":"color:var(--muted2)"}">${r.age}d</td>
+      <td>${r.owner?esc(r.owner):'<span class="dim2">Not assigned</span>'}</td>
+      <td class="mono dim">${r.due||'<span class="dim2">Not set</span>'}</td><td>${stChip(r.status)}</td></tr>`).join("")
+      ||'<tr><td colspan="10" class="dim2" style="padding:18px">Nothing matches the current filters.</td></tr>'}</tbody></table></div></div>
+  <div class="foot"><span>Showing ${show.length} of ${nf(rows.length)}, oldest first</span><span>Select a row to assign an owner and set a due date</span></div>`;
+}
+
+function vCoverage(){
+  const logs=[];
+  AREAS.filter(a=>!S.area||a.id===S.area).filter(a=>!S.div||a.divs.includes(S.div)).forEach(a=>{
+    const sh=share(a,S.div);
+    SUBS[a.id].filter(s=>!S.sub||!S.area||s.id===S.sub).forEach(s=>{
+      const rs=RULES[a.id].filter(r=>r.sub===s.id);
+      logs.push([s.last,a.code+"-"+s.id,s.name,s.population*sh,rs.length,rs.reduce((x,r)=>x+r.failed,0)*sh,s.cadence]);});
+  });
+  const total=logs.reduce((x,l)=>x+l[3],0), ex=logs.reduce((x,l)=>x+l[5],0);
+  return `<div class="eyebrow">Evidence</div><h2 class="h2">Run and evidence log</h2>
+  <p class="sub">What ran, when, over how many records, and how that count reconciles to the source system. Every night, without anyone starting it.</p>
+  <div class="recon" style="margin-top:18px">
+    <h3>Population reconciliation, last completed run</h3>
+    <div class="p">Records present in the source systems against records put through a rule${S.div?", "+esc(divById(S.div).name)+" only":""}</div>
+    <div class="recon-bar"><div>${nf(total)} read from source, ${nf(total)} tested, 0 skipped</div></div>
+    <div class="recon-legend">
+      <div>In source at run time<b>${nf(total)}</b></div><div>Put through a rule<b>${nf(total)}</b></div>
+      <div>Skipped or unreadable<b>0</b></div><div>Exceptions raised<b>${nf(ex)}</b></div></div></div>
+  <div class="grid g21" style="margin-top:14px">
+    <div class="tbl-wrap"><div class="tbl-scroll"><table>
+      <thead><tr><th style="width:112px">Last run</th><th style="width:88px">Sub process</th><th>Name</th>
+      <th style="width:92px">Cadence</th><th class="num" style="width:106px">Source count</th><th class="num" style="width:88px">Tested</th>
+      <th class="num" style="width:62px">Rules</th><th class="num" style="width:84px">Coverage</th><th class="num" style="width:92px">Exceptions</th></tr></thead>
+      <tbody>${logs.map((l,i)=>`<tr class="${i%2?"zebra":""}"><td class="mono dim">${l[0]}</td>
+        <td class="rid">${l[1]}</td><td>${esc(l[2])}</td><td class="mono dim2">${l[6]}</td>
+        <td class="num dim">${nf(l[3])}</td><td class="num">${nf(l[3])}</td><td class="num dim">${l[4]}</td>
+        <td class="num" style="color:var(--pass)">100 %</td><td class="num" style="color:var(--red)">${nf(l[5])}</td></tr>`).join("")}</tbody></table></div></div>
+    <div class="card"><div class="card-h"><h3>Why this page exists</h3></div><div class="card-b">
+      <div class="note">A tool that decides its own checks can show you what it found. It cannot show you what it did not look at.</div>
+      <div class="note" style="margin-top:10px">Because the rules here are written by internal audit and then fixed and versioned, every run leaves a record of which rule ran, on what date, over how many records, and how that count reconciles to the source.</div>
+      <div class="note" style="margin-top:10px">That is what lets a coverage claim be defended in front of the audit committee or a statutory auditor rather than asserted.</div>
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--line-soft)">
+        <div class="logline"><span class="ts">27 Aug 06:12:04</span><span class="rs">PASS</span><span>JOP-1 v3, 14,286 read, 0 skipped</span></div>
+        <div class="logline"><span class="ts">27 Aug 06:23:11</span><span class="rs">PASS</span><span>P2P-6 v2, 127,904 read, 0 skipped</span></div>
+        <div class="logline"><span class="ts">27 Aug 06:28:40</span><span class="rs">PASS</span><span>O2C-4 v1, 412,600 read, 0 skipped</span></div>
+        <div class="logline" style="border:0"><span class="ts">27 Aug 06:31:22</span><span class="rs">PASS</span><span>INV-1 v2, 486,200 read, 0 skipped</span></div>
+      </div></div></div></div>`;
+}
+
+function vBoard(){
+  const rows=scopedRows();
+  const byOwner={}; rows.filter(r=>r.owner).forEach(r=>byOwner[r.owner]=(byOwner[r.owner]||0)+1);
+  const om=Math.max(...Object.values(byOwner),1);
+  const ownerBars=Object.entries(byOwner).sort((a,b)=>b[1]-a[1]).slice(0,8).map(o=>
+    `<div class="bar-row"><div class="nm">${esc(o[0])}</div><div class="bar-track"><div class="bar-fill ${o[1]>=om?"warn":""}" style="width:${o[1]/om*100}%"></div></div><div class="vv">${o[1]}</div></div>`).join("")||'<div class="dim2">Nothing in scope.</div>';
+  const esc7=rows.filter(r=>r.age>21&&r.status!=="Closed").sort((a,b)=>b.age-a.age).slice(0,7);
+  const dRows=DIVS.filter(d=>!S.div||d.id===S.div).map((d,i)=>{
+    const rs=allRows().filter(r=>r.div===d.id).filter(r=>!S.area||r.areaId===S.area);
+    const o=rs.filter(r=>r.status==="Open").length,as=rs.filter(r=>r.status==="Assigned").length,
+          re=rs.filter(r=>r.status==="Responded").length,cl=rs.filter(r=>r.status==="Closed").length;
+    const t=(o+as+re+cl)||1;
+    let dc=0,dex=0;
+    AREAS.filter(a=>a.divs.includes(d.id)).filter(a=>!S.area||a.id===S.area).forEach(a=>{const g=areaAgg(a,d.id);dc+=g.controls;dex+=g.ex});
+    return `<tr class="click ${i%2?"zebra":""}" data-div="${d.id}"><td class="rid">${d.code}</td>
+      <td><b>${esc(d.name)}</b></td><td class="num dim">${dc}</td><td class="num" style="color:var(--red)">${nf(dex)}</td>
+      <td style="min-width:190px;padding-top:14px"><div style="display:flex;height:13px;border-radius:3px;overflow:hidden">
+        <div style="width:${o/t*100}%;background:var(--red)"></div><div style="width:${as/t*100}%;background:#D9A03C"></div>
+        <div style="width:${re/t*100}%;background:var(--accent)"></div><div style="width:${cl/t*100}%;background:var(--pass)"></div></div></td>
+      <td class="num dim">${o}</td><td class="num dim">${as}</td><td class="num dim">${re}</td><td class="num dim">${cl}</td>
+      <td class="mono dim2">27 Aug 06:47</td></tr>`;}).join("");
+  return `<div class="eyebrow">Audit committee</div><h2 class="h2">Board view</h2>
+  <p class="sub">Where the group stands as at the last run, who the open items sit with, and what has passed the escalation age.</p>
+  <div class="tbl-wrap" style="margin-top:16px"><div class="tbl-scroll"><table>
+    <thead><tr><th style="width:88px">Division</th><th>Name</th><th class="num" style="width:82px">Controls</th>
+    <th class="num" style="width:96px">Exceptions</th><th style="width:200px">Position</th>
+    <th class="num" style="width:62px">Open</th><th class="num" style="width:82px">Assigned</th>
+    <th class="num" style="width:92px">Responded</th><th class="num" style="width:70px">Closed</th><th style="width:106px">Last tested</th></tr></thead>
+    <tbody>${dRows}</tbody></table></div>
+    <div style="padding:10px 13px;border-top:1px solid var(--line-soft)" class="mono dim2">Red open, amber assigned, blue responded, green closed</div></div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card"><div class="card-h"><h3>Repeat exceptions by process owner</h3></div><div class="card-b">${ownerBars}
+      <div class="note" style="margin-top:10px;font-size:11.5px">This view is what turns a quarterly observation into a standing conversation with the business.</div></div></div>
+    <div class="card"><div class="card-h"><h3>Past escalation age</h3><span class="s">Open beyond 21 days</span></div>
+      <div class="tbl-scroll"><table><thead><tr><th>Reference</th><th>Finding</th><th class="num">Age</th><th>Owner</th></tr></thead>
+      <tbody>${esc7.map((r,i)=>`<tr class="click ${i%2?"zebra":""}" data-row="${r.key}"><td class="mono dim">${r.ref}</td>
+        <td>${esc(r.finding)}</td><td class="num" style="color:var(--red)">${r.age}d</td>
+        <td>${r.owner?esc(r.owner):'<span class="dim2">Not assigned</span>'}</td></tr>`).join("")
+        ||'<tr><td colspan="4" class="dim2" style="padding:18px">Nothing past the escalation age in scope.</td></tr>'}</tbody></table></div></div></div>`;
+}
+
+function vApproach(){
+  return `<div class="eyebrow">Operating model</div><h2 class="h2">How it runs</h2>
+  <p class="sub">The same control, before and after. Nothing here needs a new tool to be bought.</p>
+  <div class="grid g2" style="margin-top:18px">
+    <div><div class="eyebrow" style="color:var(--muted2)">Today</div><div style="margin-top:10px">
+      <div class="step old"><div class="who">IT</div>Reports generated on the Oracle server, since the monitoring team does not have access to the server itself</div>
+      <div class="step old"><div class="who">Monitoring team</div>Reports moved into SharePoint by hand</div>
+      <div class="step old"><div class="who">Monitoring team</div>Analysis done in Excel, one control at a time, when bandwidth allows</div>
+      <div class="step old"><div class="who">Monitoring team</div>Exceptions mailed to the process owner</div>
+      <div class="step old"><div class="who">Nobody</div>Status of a control across the quarter sits in a mailbox, not in one place</div></div></div>
+    <div><div class="eyebrow">After</div><div style="margin-top:10px">
+      <div class="step new"><div class="who">Platform, every night</div>Source systems land into the lakehouse on a schedule, no request and no follow up</div>
+      <div class="step new"><div class="who">Internal audit</div>Rules written by the audit team once, then fixed, versioned and run unchanged</div>
+      <div class="step new"><div class="who">Platform, every night</div>Every record in the population goes through the rule, and the run log proves it</div>
+      <div class="step new"><div class="who">Internal audit</div>Exception assigned to a named owner with a due date, ageing tracked automatically</div>
+      <div class="step new"><div class="who">Process owner</div>Once a control is stable it is handed to the business, who watch their own exceptions daily</div>
+      <div class="step new"><div class="who">Internal audit</div>Audit steps back to oversight, and tests whether the owner is actually clearing them</div></div></div></div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card"><div class="card-h"><h3>What sits where</h3></div><div class="card-b">
+      <div class="note">The lakehouse, the rules and the reports sit inside the Titan environment. There is no product to license and no per user subscription. Once a control is built it stays built and it belongs to Titan.</div>
+      <div class="note" style="margin-top:10px">The first controls carry the cost of setting up the lakehouse and the reporting layer. Controls after that reuse the same foundation, so each one costs less than the one before it.</div>
+      <div class="note" style="margin-top:10px">Where a control depends on something collected by hand today, such as a physical verification sheet, the collection itself moves to a form on the phone so the record lands in the same place as everything else.</div></div></div>
+    <div class="card"><div class="card-h"><h3>Where AI is used, and where it is not</h3></div><div class="card-b">
+      <div class="note">Not used to decide what to test. A model that writes its own checks changes its mind between runs and cannot evidence what it covered.</div>
+      <div class="note" style="margin-top:10px">Used to read what a person would otherwise read. Contracts, verification sheets, approvals and documents in any language are turned into structured rows, which the fixed rules then test.</div>
+      <div class="note" style="margin-top:10px">That split is deliberate. It is what allows the coverage claim on the evidence log to hold.</div></div></div></div>
+  <div class="foot"><span>Demonstration build, all figures illustrative</span><span>Dhiren.Abraham@netscribes.com</span></div>`;
+}
+
+/* ================= chrome ================= */
+function asbar(){
+  const b=document.getElementById("asbar");
+  if(S.hero){b.style.display="none";return}
+  b.style.display="flex";
+  b.innerHTML=`<span class="t">Control status as at 27 Aug 2026</span>
+    <span class="live"><span class="dot"></span>Last run completed today 06:47, next run tonight 02:00</span>`;
+}
+function filters(){
+  const f=document.getElementById("filters");
+  if(S.hero||S.view==="approach"){f.style.display="none";return}
+  f.style.display="flex";
+  const areaOpts=AREAS.filter(a=>!S.div||a.divs.includes(S.div));
+  const subOpts=S.area?SUBS[S.area]:[];
+  f.innerHTML=`<span class="lbl">Division</span><select id="fd"><option value="">All divisions</option>
+      ${DIVS.map(d=>`<option value="${d.id}" ${S.div===d.id?"selected":""}>${d.name}</option>`).join("")}</select>
+    <span class="lbl">Control area</span><select id="fa"><option value="">All areas</option>
+      ${areaOpts.map(a=>`<option value="${a.id}" ${S.area===a.id?"selected":""}>${a.code} ${a.name}</option>`).join("")}</select>
+    ${subOpts.length?`<span class="lbl">Sub process</span><select id="fsub"><option value="">All</option>
+      ${subOpts.map(s=>`<option value="${s.id}" ${S.sub===s.id?"selected":""}>${s.name}</option>`).join("")}</select>`:""}
+    <span class="lbl">Status</span><select id="fs">${["All","Open","Assigned","Responded","Closed"].map(o=>`<option ${S.status===o?"selected":""}>${o}</option>`).join("")}</select>
+    <span class="lbl">Severity</span><select id="fv">${["All","High","Medium","Low"].map(o=>`<option ${S.sev===o?"selected":""}>${o}</option>`).join("")}</select>
+    ${(S.div||S.area||S.sub||S.status!=="All"||S.sev!=="All"||S.rule)?'<button class="clearall" id="clr">Clear filters</button>':""}`;
+  const g=id=>f.querySelector("#"+id);
+  g("fd").onchange=e=>{S.div=e.target.value;if(S.area&&S.div&&!areaById(S.area).divs.includes(S.div)){S.area="";S.sub="";S.rule=null}render()};
+  g("fa").onchange=e=>{S.area=e.target.value;S.sub="";S.rule=null;render()};
+  if(g("fsub")) g("fsub").onchange=e=>{S.sub=e.target.value;S.rule=null;render()};
+  g("fs").onchange=e=>{S.status=e.target.value;render()};
+  g("fv").onchange=e=>{S.sev=e.target.value;render()};
+  if(g("clr")) g("clr").onclick=()=>{S.div="";S.area="";S.sub="";S.status="All";S.sev="All";S.rule=null;render()};
+}
+function render(){
+  const c=document.getElementById("content");
+  asbar(); filters();
+  if(S.hero) c.innerHTML=vHero();
+  else if(S.view==="status") c.innerHTML=vStatus();
+  else if(S.view==="worklist") c.innerHTML=vWorklist();
+  else if(S.view==="coverage") c.innerHTML=vCoverage();
+  else if(S.view==="board") c.innerHTML=vBoard();
+  else c.innerHTML=vApproach();
+  document.querySelectorAll("#nav button").forEach(b=>b.setAttribute("aria-current",(!S.hero&&b.dataset.view===S.view)?"true":"false"));
+  document.querySelectorAll(".persona button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.persona===S.persona?"true":"false"));
+  const en=document.getElementById("enter"); if(en) en.onclick=()=>{S.hero=false;render()};
+  const br=document.getElementById("backRule"); if(br) br.onclick=()=>{S.rule=null;render()};
+  c.querySelectorAll("[data-div]").forEach(b=>b.onclick=()=>{S.div=b.dataset.div;S.rule=null;render()});
+  c.querySelectorAll("[data-area]").forEach(b=>b.onclick=()=>{S.area=b.dataset.area;S.sub="";S.rule=null;S.view="status";render()});
+  c.querySelectorAll("[data-rule]").forEach(b=>b.onclick=()=>{S.rule=b.dataset.rule;render()});
+  c.querySelectorAll("[data-row]").forEach(b=>b.onclick=()=>openDrawer(b.dataset.row));
+}
+
+/* ================= drawer ================= */
+function openDrawer(key){
+  const row=allRows().find(x=>x.key===key); if(!row) return;
+  const shape=SHAPES[row.shape];
+  document.getElementById("dTitle").textContent=row.finding;
+  document.getElementById("dRef").textContent=row.ref+"  ·  "+row.ruleId+"  ·  "+divById(row.div).name+"  ·  raised "+row.age+" days ago";
+  const kv=shape.c.map((c,i)=>`<dt>${esc(c)}</dt><dd>${esc(row.cells[i])}</dd>`).join("");
+  const trail=row.trail.length?row.trail.map(t=>`<div><span class="w">${t[0]}</span><br>${esc(t[1])}</div>`).join("")
+    :'<div class="dim2">Nothing recorded yet. Assign this item to a process owner to start the trail.</div>';
+  document.getElementById("dBody").innerHTML=`
+    <div style="display:flex;gap:8px;flex-wrap:wrap">${stChip(row.status)}${sevChip(row.sev)}${monChip(row.mon,row.owner)}
+      ${row.age>21&&row.status!=="Closed"?'<span class="chip no"><span class="dot"></span>Past escalation age</span>':""}</div>
+    <div class="d-sec"><h4>Control that raised it</h4>
+      <div class="rule-box"><div class="h">${row.ruleId} &nbsp;·&nbsp; ${esc(row.subName)}</div>${esc(row.ruleD)}</div></div>
+    <div class="d-sec"><h4>Transaction</h4><dl class="kv"><dt>Division</dt><dd>${esc(divById(row.div).name)}</dd>${kv}<dt>Value</dt><dd>${row.value}</dd></dl></div>
+    <div class="d-sec"><h4>Route and track</h4>
+      <div class="field"><label for="dOwner">Process owner</label><select id="dOwner"><option value="">Select an owner</option>
+        ${OWNERS.map(o=>`<option ${o===row.owner?"selected":""}>${o}</option>`).join("")}</select></div>
+      <div class="field"><label for="dDue">Response due by</label><input id="dDue" type="date" value="2026-09-05"></div>
+      <div class="field"><label for="dNote">Note to the process owner</label><input id="dNote" placeholder="Explain the exception and the corrective action taken"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="dAssign" style="padding:9px 18px;font-size:12.5px">Assign</button>
+        <button class="btn plain" id="dCloseItem" style="padding:9px 18px;font-size:12.5px">Close item</button></div>
+      <div id="dMsg" style="font-size:11.5px;margin-top:9px" class="hidden"></div></div>
+    <div class="d-sec"><h4>Trail</h4><div class="trail">${trail}</div></div>
+    <div class="d-sec"><h4>Source</h4><div class="note" style="font-size:11.5px">Read from the lakehouse on the run of 27 Aug 2026. The underlying record has not been altered and the rule version that raised it is recorded in the evidence log.</div></div>`;
+  document.getElementById("dAssign").onclick=()=>{
+    const o=document.getElementById("dOwner").value,msg=document.getElementById("dMsg");
+    msg.classList.remove("hidden");
+    if(!o){msg.textContent="Select a process owner before assigning.";msg.style.color="var(--red)";return}
+    row.owner=o;row.status="Assigned";
+    const d=document.getElementById("dDue").value;
+    row.due=d?new Date(d).toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"}):"05 Sep 2026";
+    row.trail=row.trail.concat([["27 Aug 2026","Assigned for explanation"]]);
+    msg.textContent="Assigned to "+o+". Ageing now runs against the due date.";msg.style.color="var(--pass)";
+    render();setTimeout(()=>openDrawer(key),0);
+  };
+  document.getElementById("dCloseItem").onclick=()=>{
+    row.status="Closed";row.trail=row.trail.concat([["27 Aug 2026","Closed by audit, corrective action agreed"]]);
+    render();openDrawer(key);
+  };
+  document.getElementById("drawer").classList.add("on");
+  document.getElementById("drawer").setAttribute("aria-hidden","false");
+  document.getElementById("scrim").classList.add("on");
+}
+function shut(){
+  document.getElementById("drawer").classList.remove("on");
+  document.getElementById("drawer").setAttribute("aria-hidden","true");
+  document.getElementById("scrim").classList.remove("on");
+}
+document.getElementById("dClose").onclick=shut;
+document.getElementById("scrim").onclick=shut;
+document.addEventListener("keydown",e=>{if(e.key==="Escape")shut()});
+document.getElementById("markBtn").onclick=()=>{S.hero=true;render()};
+document.querySelectorAll("#nav button").forEach(b=>b.onclick=()=>{S.hero=false;S.view=b.dataset.view;S.rule=null;render()});
+document.querySelectorAll(".persona button").forEach(b=>b.onclick=()=>{S.persona=b.dataset.persona;S.rule=null;S.hero=false;render()});
+render();
+</script>
+</body>
+</html>
